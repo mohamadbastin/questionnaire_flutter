@@ -5,6 +5,7 @@ import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
+import 'screens/authScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,13 +22,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'AskFill',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: Colors.white,
         ),
         home: MyHomePage(),
         routes: {
           // "/": (_) => SplashScreen(),
           RecentFormsScreen.routeName : (_) => RecentFormsScreen(),
-          "/recent": (_) => RecentFormsScreen(),
+          AuthScreen.routeName : (_) => AuthScreen(),
+          
         },
       ),
     );
