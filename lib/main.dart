@@ -10,7 +10,7 @@ import 'screens/authScreen.dart';
 
 void main() => runApp(MyApp());
 
-final String host = "http://127.0.0.1:8000";
+final String host = "https://ques.mbastin.ir";
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
