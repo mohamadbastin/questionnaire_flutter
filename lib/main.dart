@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
+import 'package:questionnaire_flutter/screens/entercode.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
 import 'screens/authScreen.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [ChangeNotifierProvider<Profile>.value(value: Profile()),
-      // ChangeNotifierProvider<FormProvider>.value(value: FormProvider())
+      ChangeNotifierProvider<FormProvider>.value(value: FormProvider())
       ],
       child: MaterialApp(
         title: 'AskFill',
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
           // "/": (_) => SplashScreen(),
           RecentFormsScreen.routeName : (_) => RecentFormsScreen(),
           AuthScreen.routeName : (_) => AuthScreen(),
+          EnterCodeScreen.routeName: (_) => EnterCodeScreen(),
           
         },
       ),

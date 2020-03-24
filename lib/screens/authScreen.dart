@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 
-
 class AuthScreen extends StatefulWidget {
   static final routeName = "/auth";
   @override
@@ -14,7 +13,7 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController phoneController = new TextEditingController();
   var focusNode = new FocusNode();
   String that = "next";
-  Future<void> _sendcode;
+  Profile _pro;
 
   validatephone() async {
     // phoneController.
@@ -23,27 +22,46 @@ class _AuthScreenState extends State<AuthScreen> {
         that = "";
         FocusScope.of(context).requestFocus(new FocusNode());
       });
-      if (phoneController.text.length == 10 && phoneController.text[0] == "9"){
-            _sendcode = Provider.of<Profile>(context, listen: false).sendCode(phoneController.text);
-            
-
+      if (phoneController.text.length == 10 && phoneController.text[0] == "9") {
+        _pro = Provider.of<Profile>(context, listen: false);
+            _pro.sendCode("+98" + phoneController.text);
+            _pro.phone = "+98" + phoneController.text;
+            Navigator.pushNamed(context, '/entercode');
+            setState(() {
+              that = "next";
+              FocusScope.of(context).requestFocus(focusNode);
+            });
+            FocusScope.of(context).requestFocus(focusNode);
       } else {
         showDialog(
-                
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    contentPadding: EdgeInsets.all(0.0),
-                    titlePadding: EdgeInsets.all(0.0),
-                    content: Container(
-                      color: Colors.redAccent,
-                      child: Column(children: <Widget>[Center(child: Text("Phone Number Is Not Valid.\nTry Again")),
-                      Align(alignment: Alignment.bottomCenter,child: RaisedButton(onPressed: null, child: Text("ok"),))]),
-                      height: 100,
-                      width: 100,
-                    )
-                  );
-                });        
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  contentPadding: EdgeInsets.all(0.0),
+                  titlePadding: EdgeInsets.all(0.0),
+                  content: Container(
+                    color: Colors.redAccent,
+                    child: Column(children: <Widget>[
+                      Center(
+                          child: Text("Phone Number Is Not Valid.\nTry Again")),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              validatephone();
+                              // setState(() {
+                                // that = "next";
+                                // FocusScope.of(context).requestFocus(focusNode);
+                              // });
+                            },
+                            child: Text("ok"),
+                          ))
+                    ]),
+                    height: 100,
+                    width: 100,
+                  ));
+            });
       }
     } else {
       setState(() {
@@ -53,23 +71,19 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-
   enabletext() {
-    if (that=="next"){
+    if (that == "next") {
       return true;
     } else {
       return false;
     }
   }
 
-
   @override
-  void initState (){
+  void initState() {
     super.initState();
-
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,43 +150,43 @@ class _AuthScreenState extends State<AuthScreen> {
               Expanded(
                 flex: 1,
                 child: Container(
-                    // foregroundDecoration: BoxDecoration(
-                    //   color: Colors.grey,
-                    //   backgroundBlendMode: BlendMode.clear,
-                    // ),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: TextField(
-                        controller: phoneController,
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.done,
-                        focusNode: focusNode,
-                        autofocus: true,
-                        // readOnly: that=="next"? false : true,
-                        // enabled: that=="next"? false : true,
-                        enabled: true,
-                        // enabled: enabletext() ,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.phone,
-                            color: Colors.black,
-                          ),
-                          // labelText: 'Enter Your Phone Number',
-                          // enabledBorder: UnderlineInputBorder(
-                          //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
-                          // hintText: 'Enter Your Phone Number',
-                          prefix: Text('+98'),
-                          hintStyle: TextStyle(color: Colors.black),
-                          fillColor: Colors.black,
-                        )),
-                  ),
+                  // foregroundDecoration: BoxDecoration(
+                  //   color: Colors.grey,
+                  //   backgroundBlendMode: BlendMode.clear,
+                  // ),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.done,
+                      focusNode: focusNode,
+                      autofocus: true,
+                      // readOnly: that=="next"? false : true,
+                      // enabled: that=="next"? false : true,
+                      enabled: true,
+                      // enabled: enabletext() ,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.phone,
+                          color: Colors.black,
+                        ),
+                        // labelText: 'Enter Your Phone Number',
+                        // enabledBorder: UnderlineInputBorder(
+                        //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
+                        // hintText: 'Enter Your Phone Number',
+                        prefix: Text('+98'),
+                        hintStyle: TextStyle(color: Colors.black),
+                        fillColor: Colors.black,
+                      )),
+                ),
               ),
               Expanded(flex: 2, child: Container()),
             ]),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: null),
+      // floatingActionButton: FloatingActionButton(onPressed: null),
     );
   }
 }

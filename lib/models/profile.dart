@@ -5,6 +5,7 @@ import 'package:questionnaire_flutter/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
+String authtoken;
 class Profile with ChangeNotifier {
   int id;
   String name;
@@ -13,15 +14,10 @@ class Profile with ChangeNotifier {
   String phone;
   String token;
 
-  Profile(
-      {this.id,
-      this.name,
-      this.email,
-      this.phone,
-      this.picture});
+  Profile({this.id, this.name, this.email, this.phone, this.picture});
 
   bool get isAuth {
-    return token != null;
+    return token != null && authtoken != null; 
   }
 
   Future<bool> autologin() async {
@@ -31,6 +27,7 @@ class Profile with ChangeNotifier {
     }
     // add other information
     token = prefs.getString("askfilltoken");
+    authtoken = token;
     notifyListeners();
     return true;
   }
@@ -42,7 +39,27 @@ class Profile with ChangeNotifier {
         }),
         headers: {
           'Content-Type': 'application/json',
+        }).then((value) => null);
+    print("sending code");
+  }
+
+  Future<void> login(String pin, String phone) async {
+    final res = await http.post("$host/login/",
+        body: json.encode({'username': phone, 'password': pin}),
+        headers: {
+          'Content-Type': 'application/json',
         });
-        print("sending code");
+    print("got in");
+
+    print(res);
+    print(res.body);
+    token = json.decode(res.body)['token'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('askfilltoken', token);
+    // final Map<String, dynamic> initialData = await fetchUserInitialInfo();
+    // name = initialData['name'];
+    // department = departments.findById(initialData['department']);
+    // image = initialData['picture'];
+    notifyListeners();
   }
 }
