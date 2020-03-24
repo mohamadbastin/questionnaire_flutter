@@ -43,6 +43,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       _phone = Provider.of<Profile>(context, listen: false).phone;
       try{
           make = Provider.of<Profile>(context, listen: false).login(pin, _phone);
+          Navigator.popAndPushNamed(context, '/recent');
+          
       }
       on SocketException catch(e){
         print("no net");

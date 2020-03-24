@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:questionnaire_flutter/models/profile.dart';
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,7 @@ class MainDrawer extends StatelessWidget {
             Divider(),
             ListTile(
               title: Text('Log Out'),
+              onTap: () => Provider.of<Profile>(context, listen: false).logout(),
             )
           ],
         ),

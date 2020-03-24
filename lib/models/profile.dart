@@ -62,4 +62,13 @@ class Profile with ChangeNotifier {
     // image = initialData['picture'];
     notifyListeners();
   }
+
+  Future<void> logout() async {
+    name = null;
+    phone = null;
+    token = null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    notifyListeners();
+  }
 }
