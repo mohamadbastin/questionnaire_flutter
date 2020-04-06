@@ -65,7 +65,10 @@ class MainDrawer extends StatelessWidget {
             Divider(),
             ListTile(
               title: Text('Log Out'),
-              onTap: () => Provider.of<Profile>(context, listen: false).logout(),
+              onTap: () { Provider.of<Profile>(context, listen: false).logout();
+              print("f");
+              Navigator.popAndPushNamed(context, '/auth');},
+              
             )
           ],
         ),

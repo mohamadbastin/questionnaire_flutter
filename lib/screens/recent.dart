@@ -70,65 +70,190 @@ class _RecentFormsState extends State<RecentForms> {
               itemCount: myFormsList.length,
               itemBuilder: (context, i) {
                 // print(i);
-                return Column(children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 230,
-                    child: Stack(children: <Widget>[
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                            // color: Colors.cyanAccent,
-                            decoration: BoxDecoration(
-                                color: Colors.cyanAccent,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            height: 110,
-                            child: Container(
-                              // alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                    top: 25, left: 15, right: 15, bottom: 15),
-                                child: Wrap(
-                                    alignment: WrapAlignment.start,
-                                    spacing: 20,
-                                    runSpacing: 10,
-                                    children: <Widget>[
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].name)),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].description)),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].author.name)),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].estimated_time.toString())),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].name)),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].name)),
-                                      Container(decoration: BoxDecoration(color: Colors.purpleAccent, borderRadius: BorderRadius.circular(5)),padding: EdgeInsets.all(5),child: Text(myFormsList[i].name)),
-                                    ]),
-                              ),
-                            )),
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
+                // return Column(children: <Widget>[
+                //   Container(
+                //     width: MediaQuery.of(context).size.width * 0.8,
+                //     height: 230,
+                //     child: Stack(children: <Widget>[
+                //       Align(
+                //         alignment: Alignment.bottomCenter,
+                //         child: Container(
+                //             // color: Colors.cyanAccent,
+                //             decoration: BoxDecoration(
+                //                 color: Colors.cyanAccent,
+                //                 borderRadius:
+                //                     BorderRadius.all(Radius.circular(10))),
+                //             height: 110,
+                //             child: Container(
+                //               // alignment: Alignment.center,
+                //               width: MediaQuery.of(context).size.width * 0.8,
+                //               child: Container(
+                //                 padding: EdgeInsets.only(
+                //                     top: 25, left: 15, right: 15, bottom: 15),
+                                // child: Wrap(
+                                //     alignment: WrapAlignment.start,
+                                //     spacing: 20,
+                                //     runSpacing: 10,
+                                //     children: <Widget>[
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child: Text(myFormsList[i].name)),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child:
+                                //               Text(myFormsList[i].description)),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child:
+                                //               Text(myFormsList[i].author.name)),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child: Text(myFormsList[i]
+                                //               .estimated_time
+                                //               .toString())),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child: Text(myFormsList[i].name)),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child: Text(myFormsList[i].name)),
+                                //       Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.purpleAccent,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(5)),
+                                //           padding: EdgeInsets.all(5),
+                                //           child: Text(myFormsList[i].name)),
+                                //     ]),
+                //               ),
+                //             )),
+                //       ),
+                //       Align(
+                //         alignment: Alignment.topCenter,
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //               shape: BoxShape.rectangle,
+                //               color: Colors.redAccent,
+                //               borderRadius:
+                //                   BorderRadius.all(Radius.circular(10))),
+                //           height: 140,
+                //           width: MediaQuery.of(context).size.width * 0.7,
+                //           child: ClipRRect(
+                //             child: Image.asset(
+                //               'assets/images/a.png',
+                //               fit: BoxFit.fill,
+                //             ),
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //         ),
+                //       ),
+                //     ]),
+                //   ),
+                //   Divider()
+                // ]);
+                return Container(width: MediaQuery.of(context).size.width,child: 
+                Column(
+                                  children: <Widget>[Row(children: <Widget>[
+                    Container(height: 120,width: 120,child: Image.asset('assets/images/a.png', fit: BoxFit.fill),),
+                    Container(
+                        height: 120,
+                        width: MediaQuery.of(context).size.width - 160,
+                      child: Align(
+                          alignment: Alignment.topLeft,
+                        child: Wrap(
+
+                    alignment: WrapAlignment.start,
+                    spacing: 2,
+                    // direction: Axis.vertical,
+                    runSpacing: 3,
+                    children: <Widget>[
+                      Container(
                           decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.redAccent,
+                              color: Colors.purpleAccent,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          height: 140,
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: ClipRRect(
-                            child: Image.asset(
-                              'assets/images/a.png',
-                              fit: BoxFit.fill,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child: Text(myFormsList[i].name)),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child:
+                              Text(myFormsList[i].description)),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child:
+                              Text(myFormsList[i].author.name)),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child: Text(myFormsList[i]
+                              .estimated_time
+                              .toString())),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child: Text(myFormsList[i].name)),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child: Text(myFormsList[i].name)),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius:
+                                  BorderRadius.circular(5)),
+                          padding: EdgeInsets.all(5),
+                          child: Text(myFormsList[i].name)),
+                    ]),
                         ),
                       ),
-                    ]),
-                  ),
-                  Divider()
-                ]);
+                    
+                    
+                  ],),
+                  Divider(),
+                  
+                                  ])
+                );
               },
             ),
           ),
