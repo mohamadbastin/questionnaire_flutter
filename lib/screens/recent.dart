@@ -324,7 +324,7 @@ class _RecentFormsState extends State<RecentForms> {
                                         ]),
                                     Align(
                                       alignment: Alignment.bottomRight,
-                                      child: Icon(Icons.lock_outline, color: Colors.black,),
+                                      child: Icon(myFormsList[i].is_private ? Icons.lock_outline : Icons.lock_open, color: Colors.black,),
                                     )
                                   ],
                                 ),
