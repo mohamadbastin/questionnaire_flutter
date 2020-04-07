@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             inputDecorationTheme: InputDecorationTheme(
                 filled: true,
-                hintStyle: TextStyle(color: Colors.black54),
+                hintStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide: BorderSide(
