@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 class MainDrawer extends StatelessWidget {
+  Widget _drawerListTile(String title, String routeName, BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        Provider.of<Profile>(context, listen: false).logout();
+        Navigator.of(context).popAndPushNamed(routeName);
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.blueAccent,
         child: Column(
           children: <Widget>[
             AppBar(
-              backgroundColor: Colors.blueAccent,
               title: Text("AskFill"),
+              centerTitle: true,
               leading: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: null,
@@ -23,18 +31,28 @@ class MainDrawer extends StatelessWidget {
             GestureDetector(
                 onTap: null,
                 child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Colors.grey,
+                      Colors.blueGrey,
+                    ],
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.elliptical(100, 50),
+                      bottomLeft: Radius.elliptical(100, 50),
+                    )
+                  ),
                     child: Container(
                   height: 150,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      
                       Container(
                         // alignment: Alignment.centerLeft,
                         height: 100,
                         width: 100,
                         // margin: EdgeInsets.only(bottom: 20.0),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(shape: BoxShape.circle),
                         child: FittedBox(
                           fit: BoxFit.fill,
                           child: ClipOval(
@@ -51,25 +69,18 @@ class MainDrawer extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(alignment: Alignment.bottomLeft,)
+                      Container(alignment: Alignment.center,)
                     ],
                   ),
                 ))),
-            // Divider(),
-            ListTile(title: Text("My Forms"), onTap: null),
+            _drawerListTile('My Forms', '/recent', context),
             Divider(),
-            ListTile(
-              title: Text('Filled Forms'),
-              onTap: null,
-            ),
+            _drawerListTile('Filled Forms', '/auth', context),
             Divider(),
-            ListTile(
-              title: Text('Log Out'),
-              onTap: () { Provider.of<Profile>(context, listen: false).logout();
-              print("f");
-              Navigator.popAndPushNamed(context, '/auth');},
-              
-            )
+            _drawerListTile("Create Form", '/createForm', context),
+            Divider(),
+            _drawerListTile("Logout", '/auth', context),
+
           ],
         ),
       ),

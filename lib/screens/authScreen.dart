@@ -5,6 +5,7 @@ import 'package:questionnaire_flutter/models/profile.dart';
 
 class AuthScreen extends StatefulWidget {
   static final routeName = "/auth";
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -24,43 +25,42 @@ class _AuthScreenState extends State<AuthScreen> {
       });
       if (phoneController.text.length == 10 && phoneController.text[0] == "9") {
         _pro = Provider.of<Profile>(context, listen: false);
-            _pro.sendCode("+98" + phoneController.text);
-            _pro.phone = "+98" + phoneController.text;
-            Navigator.pushNamed(context, '/entercode');
-            setState(() {
-              that = "next";
-              FocusScope.of(context).requestFocus(focusNode);
-            });
-            FocusScope.of(context).requestFocus(focusNode);
+        _pro.sendCode("+98" + phoneController.text);
+        _pro.phone = "+98" + phoneController.text;
+        Navigator.pushNamed(context, '/entercode');
+        setState(() {
+          that = "next";
+          FocusScope.of(context).requestFocus(focusNode);
+        });
+        FocusScope.of(context).requestFocus(focusNode);
       } else {
         showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
-                  contentPadding: EdgeInsets.all(0.0),
-                  titlePadding: EdgeInsets.all(0.0),
-                  content: Container(
-                    color: Colors.redAccent,
-                    child: Column(children: <Widget>[
-                      Center(
-                          child: Text("Phone Number Is Not Valid.\nTry Again")),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child: RaisedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              validatephone();
-                              // setState(() {
-                                // that = "next";
-                                // FocusScope.of(context).requestFocus(focusNode);
-                              // });
-                            },
-                            child: Text("ok"),
-                          ))
-                    ]),
-                    height: 100,
-                    width: 100,
-                  ));
+                elevation: 10,
+                title: Text("Invalid Phone Number, Try Again."),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                actions: <Widget>[
+                  RaisedButton(
+                    elevation: 5,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      validatephone();
+                      // setState(() {
+                      // that = "next";
+                      // FocusScope.of(context).requestFocus(focusNode);
+                      // });
+                    },
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(
+                          color: Colors.white),
+                    ),
+                  )
+                ],
+              );
             });
       }
     } else {
@@ -86,104 +86,90 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          that == "next"
-              ? InkWell(
-                  child: Container(
-                    child: Center(
-                      child: Text("Next"),
-                    ),
-                  ),
-                  onTap: validatephone)
-              : InkWell(
-                  child: CircularProgressIndicator(),
-                  onTap: validatephone,
-                ),
-        ],
-        backgroundColor: Colors.red,
-        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 5,
+        title: Text("Login"),
+        centerTitle: true,
       ),
       resizeToAvoidBottomPadding: true,
-      body: new GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
+      body: Center(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.red,
-          child: Center(
-            child: Column(children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: SizedBox(height: 100),
-              ),
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Image.asset('assets/images/frm.png'),
-                    width: 200,
+          width: mediaSize.width * 0.9,
+          height: mediaSize.height * 0.5,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black45,
+                  offset: Offset(0.0, 10.0), //(x,y)
+                  blurRadius: 6.0,
+                ),
+              ],
+            gradient: LinearGradient(colors: [
+              Colors.grey.withOpacity(0.8),
+              Colors.grey.withOpacity(0.5),
+              Colors.grey.withOpacity(0.2),
+            ])
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+            Container(
+              child: Image.asset('assets/images/frm.png'),
+              width: 50,
+            ),
+              SizedBox(height: 20,),
+            Container(
+              // foregroundDecoration: BoxDecoration(
+              //   color: Colors.grey,
+              //   backgroundBlendMode: BlendMode.clear,
+              // ),
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: TextField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.done,
+                  focusNode: focusNode,
+                  autofocus: true,
+                  // readOnly: that=="next"? false : true,
+                  // enabled: that=="next"? false : true,
+                  enabled: true,
+                  // enabled: enabletext() ,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: Colors.white,
+                    ),
+                    // labelText: 'Enter Your Phone Number',
+                    // enabledBorder: UnderlineInputBorder(
+                    //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
+                    // hintText: 'Enter Your Phone Number',
+                    prefix: Text('+98'),
+                    hintStyle: TextStyle(color: Colors.white),
                   )),
-              Expanded(
-                flex: 1,
-                child: SizedBox(height: 100),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Align(
-                    alignment: Alignment(0, -0.8),
+
+            ),
+                Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  child: RaisedButton(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40.0),
+                    onPressed: () async {
+                      await validatephone();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "AskFill Login",
-                      style: TextStyle(fontSize: 25),
+                      "Retrieve Code",
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: SizedBox(height: 20),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  // foregroundDecoration: BoxDecoration(
-                  //   color: Colors.grey,
-                  //   backgroundBlendMode: BlendMode.clear,
-                  // ),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: TextField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.done,
-                      focusNode: focusNode,
-                      autofocus: true,
-                      // readOnly: that=="next"? false : true,
-                      // enabled: that=="next"? false : true,
-                      enabled: true,
-                      // enabled: enabletext() ,
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.phone,
-                          color: Colors.black,
-                        ),
-                        // labelText: 'Enter Your Phone Number',
-                        // enabledBorder: UnderlineInputBorder(
-                        //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
-                        // hintText: 'Enter Your Phone Number',
-                        prefix: Text('+98'),
-                        hintStyle: TextStyle(color: Colors.black),
-                        fillColor: Colors.black,
-                      )),
-                ),
-              ),
-              Expanded(flex: 2, child: Container()),
-            ]),
-          ),
+          ]),
         ),
       ),
       // floatingActionButton: FloatingActionButton(onPressed: null),

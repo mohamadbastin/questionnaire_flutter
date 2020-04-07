@@ -66,7 +66,6 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             verifycode(pin);
           },)
         ],
-        backgroundColor: Colors.red,
         elevation: 0,
       
     ),
@@ -77,7 +76,6 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.red,
           child: Center(
             child: Column(children: <Widget>[
               Expanded(

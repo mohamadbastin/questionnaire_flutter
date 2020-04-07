@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
+import 'package:questionnaire_flutter/screens/createForm.dart';
 import 'package:questionnaire_flutter/screens/entercode.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
@@ -23,7 +24,34 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'AskFill',
         theme: ThemeData(
-          primaryColor: Colors.white,
+            primarySwatch: Colors.deepPurple,
+            focusColor: Colors.deepOrange,
+            accentColor: Colors.deepPurpleAccent,
+            brightness: Brightness.dark,
+            inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                hintStyle: TextStyle(color: Colors.black54),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                        width: 2.0
+                    ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                        color: Colors.white70,
+                        width: 2.0
+                    )
+                ),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 1.0
+                    )
+                )
+            )
         ),
         home: MyHomePage(),
         routes: {
@@ -31,7 +59,7 @@ class MyApp extends StatelessWidget {
           RecentFormsScreen.routeName : (_) => RecentFormsScreen(),
           AuthScreen.routeName : (_) => AuthScreen(),
           EnterCodeScreen.routeName: (_) => EnterCodeScreen(),
-          
+          CreateFormScreen.routeName: (_) => CreateFormScreen(),
         },
       ),
     );
