@@ -37,8 +37,8 @@ class FormProvider with ChangeNotifier {
     print(extractedData);
 
     final List<myForm> extractedList = [];
-
-    print(2);
+    // print(extractedData.length);
+    // print(2);
 
     extractedData.forEach((form) {
       var i = form['author'];
@@ -52,10 +52,10 @@ class FormProvider with ChangeNotifier {
         // print(3);
 
       List<int> times = [];
-      // print(form['time'][1]['hour'].substring(0,2));
+      // print(form['time']);
       for (int j=0; j<form['time'].length;j++){
-        // print(j);
-        times.add(int.parse(form['time'][j]['hour'].substring(0,2)));
+        // print();
+        times.add(int.parse(form['time'][j]['hour']));
       }
       // print(4);
       // print(times.length);
@@ -74,7 +74,7 @@ class FormProvider with ChangeNotifier {
         times: times
       
       ));
-      // print(5);
+      // print(MediaQuery.of(context));
     });
     _myForms = extractedList;
     myFormsList = extractedList;

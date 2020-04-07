@@ -5,9 +5,11 @@ import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
 import 'package:questionnaire_flutter/screens/createForm.dart';
 import 'package:questionnaire_flutter/screens/entercode.dart';
+import 'package:questionnaire_flutter/screens/form.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
 import 'screens/authScreen.dart';
+import 'screens/form.dart';
 
 void main() => runApp(MyApp());
 
@@ -60,6 +62,7 @@ class MyApp extends StatelessWidget {
           AuthScreen.routeName : (_) => AuthScreen(),
           EnterCodeScreen.routeName: (_) => EnterCodeScreen(),
           CreateFormScreen.routeName: (_) => CreateFormScreen(),
+          FormScreen.routeName: (_) => FormScreen(),
         },
       ),
     );

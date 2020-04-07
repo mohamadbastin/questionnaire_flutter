@@ -56,17 +56,15 @@ class Profile with ChangeNotifier {
     token = json.decode(res.body)['token'];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('askfilltoken', token);
-    // final Map<String, dynamic> initialData = await fetchUserInitialInfo();
-    // name = initialData['name'];
-    // department = departments.findById(initialData['department']);
-    // image = initialData['picture'];
+    authtoken = token;
+    
     notifyListeners();
   }
 
   Future<void> logout() async {
     name = null;
     phone = null;
-    token = null;
+    authtoken = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
     notifyListeners();
