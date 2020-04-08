@@ -16,6 +16,10 @@ class _FormAspectsState extends State<FormAspects> {
     "times": []
   };
 
+  List<bool> _selected = List.generate(24, (index) {
+    return false;
+  });
+
   List<String> _times = [
     '1',
     '2',
@@ -78,6 +82,49 @@ class _FormAspectsState extends State<FormAspects> {
           FocusScope.of(context).requestFocus(nextFocusNode);
         },
       ),
+    );
+  }
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Choose Notification Times",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.0),
+            ),
+            actions: <Widget>[
+              RaisedButton(
+                child: Text("Done"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+            content: Container(
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: ListView(
+                  shrinkWrap: true,
+                  children: _times.map((String time) {
+                    return CheckboxListTile(
+                      title: Text('${time}'),
+                      value: _selected[_times.indexOf(time)],
+                      onChanged: (bool value) {
+                        setState(() {
+                          _selected[_times.indexOf(time)] = value;
+                          print(_selected);
+                        });
+                      },
+                      secondary: const Icon(Icons.hourglass_empty),
+                    );
+                  }).toList()
+              ),
+            ),
+          );
+        }
     );
   }
 
@@ -199,52 +246,7 @@ class _FormAspectsState extends State<FormAspects> {
                     ),
                     icon: Icon(Icons.access_time, color: Colors.grey,),
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              "Choose Notification Times",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                            actions: <Widget>[
-                              RaisedButton(
-                                child: Text("Done"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                            content: Container(
-                              width: double.infinity,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: ListView(
-                                shrinkWrap: true,
-                                children: _times.map((String time) {
-                                  return CheckboxListTile(
-                                    title: Text('${time}'),
-                                    value: _selectedTimes.indexOf(time) != -1,
-                                    onChanged: (bool value) {
-                                      if (_selectedTimes.indexOf(time) != -1) {
-                                        setState(() {
-                                          _selectedTimes.removeAt(_selectedTimes.indexOf(time));
-                                        });
-                                      } else {
-                                        setState(() {
-                                          _selectedTimes.add(time);
-                                        });
-                                      }
-                                      print(_selectedTimes);
-                                    },
-                                    secondary: const Icon(Icons.hourglass_empty),
-                                  );
-                                }).toList()
-                              ),
-                            ),
-                          );
-                        }
-                      );
+                      _displayDialog(context);
                     },
                   ),
                 ),

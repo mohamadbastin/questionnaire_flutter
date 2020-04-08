@@ -70,6 +70,15 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
 
   _addChoice() {
     String choice = _currentChoiceController.text;
+    if (choice == null || choice.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(message: "Please Fill the Current Choice", ctx: context);
+        }
+      );
+      return;
+    }
     setState(() {
       _choices.add(choice);
       _currentChoiceController.text = "";
@@ -164,125 +173,126 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                     ],
                   ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Expanded(
-                        flex: 6,
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        flex: 7,
+                        child: Container(
+                          height: 200,
+                          child: ListView(
+                            shrinkWrap: true,
                             children: <Widget>[
-                              TextFormField(
-                                controller: _questionTextController,
-                                validator: (String value) {
-                                  if (value.isEmpty || value == null) {
-                                    return 'This Field is Required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(FontAwesomeIcons.question, color: Colors.white70,),
-                                  labelText: "Type Your Question Here",
-                                  labelStyle: TextStyle(color: Colors.white70)
-                                ),
-                                maxLines: 3,
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 20.0),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text("Multi Choice"),
-                                      Switch(
-                                        value: _multiChoice,
-                                        activeColor: Colors.green,
-                                        inactiveThumbColor: Colors.grey,
-                                        inactiveTrackColor: Colors.grey,
-                                        onChanged: (type) {
-                                          setState(() {
-                                            _multiChoice = type;
-                                          });
-                                        },
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    TextFormField(
+                                      controller: _questionTextController,
+                                      validator: (String value) {
+                                        if (value.isEmpty || value == null) {
+                                          return 'This Field is Required';
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          prefixIcon: Icon(FontAwesomeIcons.question, color: Colors.white70,),
+                                          labelText: "Type Your Question Here",
+                                          labelStyle: TextStyle(color: Colors.white70)
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 15.0),
-                                  child: (_questionType == "Choice")
-                                      ? ListView(
-                                          controller: listViewScrollController,
-                                          addAutomaticKeepAlives: true,
-                                          physics: ClampingScrollPhysics(),
-                                          shrinkWrap: true,
-                                          children: _choices
-                                                  .map<Widget>((String choice) {
-                                                return Container(
-                                                  margin: EdgeInsets.only(
-                                                      bottom: 3.0),
-                                                  child: TextFormField(
-                                                    enabled: false,
-                                                    decoration: InputDecoration(
-                                                      hintText: choice,
-                                                      prefixIcon: Icon(Icons
-                                                          .question_answer),
+                                      maxLines: 3,
+                                    ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    _questionType == "Choice" ? Container(
+                                      margin: EdgeInsets.only(left: 20.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text("Multi Choice"),
+                                          Switch(
+                                            value: _multiChoice,
+                                            activeColor: Colors.green,
+                                            inactiveThumbColor: Colors.grey,
+                                            inactiveTrackColor: Colors.grey,
+                                            onChanged: (type) {
+                                              setState(() {
+                                                _multiChoice = type;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ) : Container(),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15.0),
+                                      child: (_questionType == "Choice")
+                                          ? ListView(
+                                        controller: listViewScrollController,
+                                        addAutomaticKeepAlives: true,
+                                        physics: ClampingScrollPhysics(),
+                                        shrinkWrap: true,
+                                        children: _choices
+                                            .map<Widget>((String choice) {
+                                          return Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: 3.0),
+                                            child: TextFormField(
+                                              enabled: false,
+                                              decoration: InputDecoration(
+                                                hintText: choice,
+                                                prefixIcon: Icon(Icons
+                                                    .question_answer),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(growable: true) +
+                                            [
+                                              TextFormField(
+                                                controller:
+                                                _currentChoiceController,
+                                                decoration: InputDecoration(
+                                                  hintText: "Question Choice",
+                                                  prefixIcon: Icon(
+                                                      Icons.question_answer),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                margin:
+                                                EdgeInsets.only(top: 5.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                                  children: <Widget>[
+                                                    FloatingActionButton(
+                                                      materialTapTargetSize:
+                                                      MaterialTapTargetSize
+                                                          .shrinkWrap,
+                                                      tooltip:
+                                                      "Add Current Choice",
+                                                      elevation: 5,
+                                                      child: Icon(Icons.add),
+                                                      backgroundColor:
+                                                      Colors.blue,
+                                                      heroTag: "choice",
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          _addChoice();
+                                                          print("here");
+                                                          _scrollToBottom();
+                                                        });
+                                                      },
                                                     ),
-                                                  ),
-                                                );
-                                              }).toList(growable: true) +
-                                              [
-                                                TextFormField(
-                                                  controller:
-                                                      _currentChoiceController,
-                                                  decoration: InputDecoration(
-                                                    hintText: "Question Choice",
-                                                    prefixIcon: Icon(
-                                                        Icons.question_answer),
-                                                  ),
+                                                  ],
                                                 ),
-                                                Container(
-                                                  width: double.infinity,
-                                                  margin:
-                                                      EdgeInsets.only(top: 5.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: <Widget>[
-                                                      FloatingActionButton(
-                                                        materialTapTargetSize:
-                                                            MaterialTapTargetSize
-                                                                .shrinkWrap,
-                                                        tooltip:
-                                                            "Add Current Choice",
-                                                        elevation: 5,
-                                                        child: Icon(Icons.add),
-                                                        backgroundColor:
-                                                            Colors.blue,
-                                                        heroTag: "choice",
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            _addChoice();
-                                                            print("here");
-                                                            _scrollToBottom();
-                                                          });
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                        ) : (_questionType == "Range") ?
+                                              ),
+                                            ],
+                                      ) : (_questionType == "Range") ?
                                       ListView(
                                         shrinkWrap: true,
                                         children: <Widget>[
@@ -322,12 +332,14 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                           ),
                                         ],
                                       )
-                                      : Container(),
+                                          : Container(),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
+                        )
                       ),
                       Expanded(
                         flex: 2,

@@ -4,9 +4,11 @@ import 'package:questionnaire_flutter/models/form.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/widgets/drawer.dart';
+import 'package:questionnaire_flutter/widgets/globalAppBar.dart';
 
 class RecentFormsScreen extends StatefulWidget {
   static final routeName = "/recent";
+
   @override
   _RecentFormsScreenState createState() => _RecentFormsScreenState();
 }
@@ -54,7 +56,7 @@ class _RecentFormsState extends State<RecentForms> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey,
-      appBar: AppBar(),
+      appBar: GlobalAppBar(),
       drawer: MainDrawer(),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -176,7 +178,8 @@ class _RecentFormsState extends State<RecentForms> {
                 //   Divider()
                 // ]);
                 return InkWell(
-                  onTap: () => Navigator.pushNamed(context, '/form', arguments: myFormsList[i]),
+                  onTap: () => Navigator.pushNamed(context, '/form',
+                      arguments: myFormsList[i]),
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       child: Column(children: <Widget>[
@@ -322,10 +325,15 @@ class _RecentFormsState extends State<RecentForms> {
                                                 )
                                               ])),
                                         ]),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Icon(myFormsList[i].is_private ? Icons.lock_outline : Icons.lock_open, color: Colors.black,),
-                                    )
+//                                    Align(
+//                                      alignment: Alignment.bottomRight,
+//                                      child: Icon(
+//                                        myFormsList[i].is_private
+//                                            ? Icons.lock_outline
+//                                            : Icons.lock_open,
+//                                        color: Colors.black,
+//                                      ),
+//                                    )
                                   ],
                                 ),
                               ),
@@ -338,7 +346,7 @@ class _RecentFormsState extends State<RecentForms> {
                           ],
                         ),
                         Divider(
-                          thickness: 1,
+                          height: 1,
                           color: Colors.black,
                         ),
                       ])),

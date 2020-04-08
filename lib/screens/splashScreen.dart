@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
+import 'package:questionnaire_flutter/screens/ErrorScreen.dart';
+import 'package:questionnaire_flutter/screens/authScreen.dart';
+import 'package:questionnaire_flutter/screens/recent.dart';
 
 
 
@@ -84,7 +87,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
 
           controller.forward();
-
       _auth = Provider.of<Profile>(context, listen: false).isAuth;
       _autologin = Provider.of<Profile>(context, listen: false).autologin();
 
@@ -95,11 +97,26 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color: Colors.blueGrey,
-      child: Center(child: GrowTransition(animation: animation, child: LogoWidget()),),
+    final profile = Provider.of<Profile>(context, listen: false);
+    return FutureBuilder(
+        future: profile.autologin(),
+        builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting ?
+        Scaffold(
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.blueGrey,
+              child: Center(child: GrowTransition(animation: animation, child: LogoWidget()),),
+            )
+        ) : snapshot.hasError ? Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Connection Failed!"),
+            elevation: 5,
+          ),
+          body: ErrorScreen(),
+        ): snapshot.data ? RecentFormsScreen()
+            : AuthScreen()
     );
   }
 }

@@ -13,11 +13,12 @@ class Profile with ChangeNotifier {
   String picture;
   String phone;
   String token;
+  bool notifications = false;
 
   Profile({this.id, this.name, this.email, this.phone, this.picture});
 
   bool get isAuth {
-    return token != null && authtoken != null; 
+    return token != null;
   }
 
   Future<bool> autologin() async {
@@ -54,10 +55,10 @@ class Profile with ChangeNotifier {
     print(res);
     print(res.body);
     token = json.decode(res.body)['token'];
+    print(authtoken);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('askfilltoken', token);
     authtoken = token;
-    
     notifyListeners();
   }
 
@@ -67,6 +68,11 @@ class Profile with ChangeNotifier {
     authtoken = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
+    notifyListeners();
+  }
+
+  void changeNotificationStatus(bool value) {
+    notifications = value;
     notifyListeners();
   }
 }
