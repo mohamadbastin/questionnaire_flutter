@@ -48,6 +48,7 @@ class _RecentFormsState extends State<RecentForms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawer(),
         appBar: AppBar(
           elevation: 5,
           title: Text("Recent Forms"),

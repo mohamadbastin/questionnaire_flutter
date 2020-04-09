@@ -7,6 +7,16 @@ class MainDrawer extends StatelessWidget {
     return ListTile(
       title: Text(title),
       onTap: () {
+        // Provider.of<Profile>(context, listen: false).logout();
+        Navigator.of(context).popAndPushNamed(routeName);
+      },
+    );
+  }
+
+  Widget _drawerListTileLogOut(String title, String routeName, BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
         Provider.of<Profile>(context, listen: false).logout();
         Navigator.of(context).popAndPushNamed(routeName);
       },
@@ -92,13 +102,13 @@ class MainDrawer extends StatelessWidget {
                     ],
                   ),
                 ))),
-            _drawerListTile('My Forms', '/recent', context),
+            _drawerListTile('Home', '/recent', context),
             Divider(),
             _drawerListTile('Filled Forms', '/auth', context),
             Divider(),
             _drawerListTile("Create Form", '/createForm', context),
             Divider(),
-            _drawerListTile("Logout", '/auth', context),
+            _drawerListTileLogOut("Logout", '/auth', context),
 
           ],
         ),
