@@ -427,27 +427,30 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (context) {
-                                          return AlertDialog(
-                                            title: Text(
-                                              "Recently Created Questions",
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            actions: <Widget>[
-                                              RaisedButton(
-                                                child: Text(
-                                                  "Close",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(color: Colors.white70),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                            content: Container(
+                                          return Dialog(
+                                            // title: Text(
+                                            //   "Recently Created Questions",
+                                            //   textAlign: TextAlign.center,
+                                            // ),
+                                            // actions: <Widget>[
+                                            //   RaisedButton(
+                                            //     child: Text(
+                                            //       "Close",
+                                            //       textAlign: TextAlign.center,
+                                            //       style: TextStyle(color: Colors.white70),
+                                            //     ),
+                                            //     onPressed: () {
+                                            //       Navigator.of(context).pop();
+                                            //     },
+                                            //   ),
+                                            // ],
+                                            child: Container(
                                               width: double.infinity,
-                                              child: _questions.isNotEmpty ? ListView.builder(
-                                                itemBuilder: (context, index) => Column(
+                                              child: _questions.isNotEmpty ? ReorderableListView(
+                                                onReorder: null,
+                                                // itemBuilder: (context, index) =>
+                                                 children:[
+                                                   Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     (_questions[index]["type"] == "Text") ? Container(
@@ -482,8 +485,10 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                                           ],
                                                         )
                                                   ],
-                                                ),
-                                                itemCount: _questions.length,
+                                                )
+                                                 ]
+                                                 ,
+                                                // itemCount: _questions.length,
                                               ) : Container(),
                                             ),
                                           );
