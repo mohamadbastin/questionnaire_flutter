@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaire_flutter/widgets/errorDialog.dart';
@@ -19,7 +21,10 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
   TextEditingController _currentChoiceController = new TextEditingController();
   TextEditingController _lowThresholdController = new TextEditingController();
   TextEditingController _highThresholdController = new TextEditingController();
-  List<String> _choices = [];
+  bool _scrollParent = false;
+  final _choiceFocusNode = new FocusNode();
+  ScrollController controller;
+  List<Map<String, dynamic>> _choices = [];
   bool _multiChoice = false;
   final appBar = AppBar(
     elevation: 5,
@@ -34,13 +39,16 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
       return;
     } else if (_questionType == "Choice") {
       if (_currentChoiceController.text.isNotEmpty) {
-        _choices.add(_questionTextController.text);
+        _choices.add({
+          "text": _questionTextController.text,
+          "controller": _currentChoiceController
+        });
       }
       if (_choices.isEmpty) {
         showDialog(
           context: context,
           builder: (context) {
-            return ErrorDialog(message: "Choice Answer Must Have At Least One Choice", ctx: context);
+            return ErrorDialog(message: "Choice Questions Must Have At Least One Choice", ctx: context);
           }
         );
       }
@@ -60,10 +68,10 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
     setState(() {
       _choices = [];
       _questionTextController.text = "";
-      _currentChoiceController.text = "";
       _lowThresholdController.text = "";
       _highThresholdController.text = "";
     });
+    _currentChoiceController = new TextEditingController();
     _questions.add(_currentQuestion);
     print(_questions);
   }
@@ -80,15 +88,27 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
       return;
     }
     setState(() {
-      _choices.add(choice);
-      _currentChoiceController.text = "";
+      _choices.add({
+        "text": choice,
+        "controller": _currentChoiceController
+      });
+      _currentChoiceController = new TextEditingController();
     });
     print(_choices);
+    FocusScope.of(context).requestFocus(_choiceFocusNode);
+
   }
 
 //  _validateQuestion(Map<String, dynamic> question) {
 //    if (_questionType == )
 //  }
+
+  _removeChoice(choice) {
+    choice["controller"].dispose();
+    setState(() {
+      _choices.remove(choice);
+    });
+  }
 
   _setFormAspects(BuildContext context) {
     showModalBottomSheet(
@@ -179,165 +199,207 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                         flex: 7,
                         child: Container(
                           height: 200,
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: <Widget>[
-                              Form(
-                                key: _formKey,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    TextFormField(
-                                      controller: _questionTextController,
-                                      validator: (String value) {
-                                        if (value.isEmpty || value == null) {
-                                          return 'This Field is Required';
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                          prefixIcon: Icon(FontAwesomeIcons.question, color: Colors.white70,),
-                                          labelText: "Type Your Question Here",
-                                          labelStyle: TextStyle(color: Colors.white70)
-                                      ),
-                                      maxLines: 3,
-                                    ),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    _questionType == "Choice" ? Container(
-                                      margin: EdgeInsets.only(left: 20.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text("Multi Choice"),
-                                          Switch(
-                                            value: _multiChoice,
-                                            activeColor: Colors.green,
-                                            inactiveThumbColor: Colors.grey,
-                                            inactiveTrackColor: Colors.grey,
-                                            onChanged: (type) {
-                                              setState(() {
-                                                _multiChoice = type;
-                                              });
-                                            },
+                          child: IgnorePointer(
+                            ignoring: _scrollParent,
+                            child: NotificationListener<OverscrollNotification>(
+                              onNotification: (_) {
+
+                                setState(() {
+                                  _scrollParent = true;
+                                });
+
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    _scrollParent = false;
+                                  });
+                                });
+
+                                return false;
+                              },
+                              child: ListView(
+                                shrinkWrap: true,
+                                children: <Widget>[
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        TextFormField(
+                                          controller: _questionTextController,
+                                          validator: (String value) {
+                                            if (value.isEmpty || value == null) {
+                                              return 'This Field is Required';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          decoration: InputDecoration(
+                                              prefixIcon: Icon(FontAwesomeIcons.question, color: Colors.white70,),
+                                              labelText: "Type Your Question Here",
+                                              labelStyle: TextStyle(color: Colors.white70)
                                           ),
-                                        ],
-                                      ),
-                                    ) : Container(),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 15.0),
-                                      child: (_questionType == "Choice")
-                                          ? ListView(
-                                        controller: listViewScrollController,
-                                        addAutomaticKeepAlives: true,
-                                        physics: ClampingScrollPhysics(),
-                                        shrinkWrap: true,
-                                        children: _choices
-                                            .map<Widget>((String choice) {
-                                          return Container(
-                                            margin: EdgeInsets.only(
-                                                bottom: 3.0),
-                                            child: TextFormField(
-                                              enabled: false,
-                                              decoration: InputDecoration(
-                                                hintText: choice,
-                                                prefixIcon: Icon(Icons
-                                                    .question_answer),
+                                          maxLines: 3,
+                                        ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        _questionType == "Choice" ? Container(
+                                          margin: EdgeInsets.only(left: 20.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text("Multi Choice"),
+                                              Switch(
+                                                value: _multiChoice,
+                                                activeColor: Colors.green,
+                                                inactiveThumbColor: Colors.grey,
+                                                inactiveTrackColor: Colors.grey,
+                                                onChanged: (type) {
+                                                  setState(() {
+                                                    _multiChoice = type;
+                                                  });
+                                                },
                                               ),
-                                            ),
-                                          );
-                                        }).toList(growable: true) +
-                                            [
-                                              TextFormField(
-                                                controller:
-                                                _currentChoiceController,
-                                                decoration: InputDecoration(
-                                                  hintText: "Question Choice",
-                                                  prefixIcon: Icon(
-                                                      Icons.question_answer),
+                                            ],
+                                          ),
+                                        ) : Container(),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 15.0),
+                                          child: (_questionType == "Choice")
+                                              ? ListView(
+                                            controller: listViewScrollController,
+                                            addAutomaticKeepAlives: true,
+                                            physics: ClampingScrollPhysics(),
+                                            shrinkWrap: true,
+                                            children: _choices
+                                                .map<Widget>((choice) {
+                                              return Container(
+                                                margin: EdgeInsets.only(
+                                                    bottom: 3.0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: TextFormField(
+//                                              enabled: false,
+                                                      controller: choice["controller"],
+                                                        decoration: InputDecoration(
+//                                                hintText: choice["text"],
+                                                          prefixIcon: Icon(Icons
+                                                              .question_answer),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(left: 5.0),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle
+                                                      ),
+                                                      child: IconButton(
+                                                        tooltip: "Remove Choice",
+                                                        icon: Icon(Icons.delete, color: Colors.white70,),
+                                                        onPressed: () {
+                                                          _removeChoice(choice);
+                                                        },
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(growable: true) +
+                                                [
+                                                  TextFormField(
+                                                    controller:
+                                                    _currentChoiceController,
+                                                    focusNode: _choiceFocusNode,
+                                                    decoration: InputDecoration(
+                                                      hintText: "Question Choice",
+                                                      prefixIcon: Icon(
+                                                          Icons.question_answer),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: double.infinity,
+                                                    margin:
+                                                    EdgeInsets.only(top: 5.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                      children: <Widget>[
+                                                        FloatingActionButton(
+                                                          materialTapTargetSize:
+                                                          MaterialTapTargetSize
+                                                              .shrinkWrap,
+                                                          tooltip:
+                                                          "Add Current Choice",
+                                                          elevation: 5,
+                                                          child: Icon(Icons.add),
+                                                          backgroundColor:
+                                                          Colors.blue,
+                                                          heroTag: "choice",
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              _addChoice();
+                                                              print("here");
+                                                              _scrollToBottom();
+                                                            });
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                          ) : (_questionType == "Range") ?
+                                          ListView(
+                                            shrinkWrap: true,
+                                            children: <Widget>[
+                                              Container(
+                                                margin: EdgeInsets.only(bottom: 3.0),
+                                                child: TextFormField(
+                                                  controller: _lowThresholdController,
+                                                  validator: (String value) {
+                                                    if (value.isEmpty || value == null) {
+                                                      return 'This Field is Required';
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Icon(Icons.arrow_downward),
+                                                    hintText: "Low Threshold",
+                                                  ),
                                                 ),
                                               ),
                                               Container(
-                                                width: double.infinity,
-                                                margin:
-                                                EdgeInsets.only(top: 5.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                                  children: <Widget>[
-                                                    FloatingActionButton(
-                                                      materialTapTargetSize:
-                                                      MaterialTapTargetSize
-                                                          .shrinkWrap,
-                                                      tooltip:
-                                                      "Add Current Choice",
-                                                      elevation: 5,
-                                                      child: Icon(Icons.add),
-                                                      backgroundColor:
-                                                      Colors.blue,
-                                                      heroTag: "choice",
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          _addChoice();
-                                                          print("here");
-                                                          _scrollToBottom();
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
+                                                margin: EdgeInsets.only(bottom: 3.0),
+                                                child: TextFormField(
+                                                  controller: _highThresholdController,
+                                                  validator: (String value) {
+                                                    if (value.isEmpty || value == null) {
+                                                      return 'This Field is Required';
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Icon(Icons.arrow_upward),
+                                                    hintText: "High Threshold",
+                                                  ),
                                                 ),
                                               ),
                                             ],
-                                      ) : (_questionType == "Range") ?
-                                      ListView(
-                                        shrinkWrap: true,
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.only(bottom: 3.0),
-                                            child: TextFormField(
-                                              controller: _lowThresholdController,
-                                              validator: (String value) {
-                                                if (value.isEmpty || value == null) {
-                                                  return 'This Field is Required';
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                              decoration: InputDecoration(
-                                                prefixIcon: Icon(Icons.arrow_downward),
-                                                hintText: "Low Threshold",
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(bottom: 3.0),
-                                            child: TextFormField(
-                                              controller: _highThresholdController,
-                                              validator: (String value) {
-                                                if (value.isEmpty || value == null) {
-                                                  return 'This Field is Required';
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                              decoration: InputDecoration(
-                                                prefixIcon: Icon(Icons.arrow_upward),
-                                                hintText: "High Threshold",
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                          : Container(),
+                                          )
+                                              : Container(),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         )
                       ),
@@ -388,15 +450,32 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                                 itemBuilder: (context, index) => Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: <Widget>[
-                                                    (_questions[index]["type"] == "Text") ? ListTile(
-                                                      leading: Text('${index + 1}. ${_questions[index]["text"]}'),
-                                                      trailing: Text(_questions[index]["type"]),
+                                                    (_questions[index]["type"] == "Text") ? Container(
+                                                      margin: EdgeInsets.only(bottom: 10.0),
+                                                      width: double.infinity,
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Flexible(
+                                                            fit: FlexFit.tight,
+                                                            flex: 5,
+                                                            child: Container(alignment: Alignment.centerLeft, child: Text('${index + 1}. ${_questions[index]["text"]}')),
+                                                          ),
+                                                          Flexible(
+                                                            flex: 1,
+                                                            fit: FlexFit.tight,
+                                                            child: Container(
+                                                                alignment: Alignment.bottomRight,
+                                                                child: Text(_questions[index]["type"], style: TextStyle(fontSize: 15.0, color: Colors.blue),)
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ) :
                                                         ExpansionTile(
-                                                          leading: Text('${index + 1}. ${_questions[index]["text"]}'),
-                                                          title: _questions[index]["type"] == "Choice" ? Text("${_questions[index]["type"]}/${_questions[index]["choice_type"]}") : Text(_questions[index]["type"]),
+//                                                          leading: Text('${index + 1}. ${_questions[index]["text"]}', overflow: TextOverflow.fade,),
+                                                          title: _questions[index]["type"] == "Choice" ? Text("${_questions[index]["type"]}/${_questions[index]["choice_type"]}", overflow: TextOverflow.fade,) : Text(_questions[index]["type"], overflow: TextOverflow.fade,),
                                                           children: _questions[index]["type"] == "Choice" ? _questions[index]["choices"].map<Widget>((choice) {
-                                                            return Text('${_questions[index]["choices"].indexOf(choice) + 1}. ${choice}');
+                                                            return Text('${_questions[index]["choices"].indexOf(choice) + 1}. ${choice["controller"].text}');
                                                           }).toList() : [
                                                             Text('Low Threshold: ${_questions[index]["start_text"]}'),
                                                             Text('High Threshold: ${_questions[index]["end_text"]}'),

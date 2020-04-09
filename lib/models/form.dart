@@ -34,6 +34,10 @@ class myForm with ChangeNotifier {
       @required this.is_active,
       this.times});
 
+  String get formName {
+    return name;
+  }
+
   Future<bool> isFilled(String token) async {
     var response = await http.get("$host/form/is-filled/$id", headers: {
       "Accept": "application/json",
@@ -65,7 +69,7 @@ class myForm with ChangeNotifier {
     var questions = List<Map<String, dynamic>>.from(
         jsonDecode(utf8.decode(response.bodyBytes)));
 
-
-
   }
+
+
 }
