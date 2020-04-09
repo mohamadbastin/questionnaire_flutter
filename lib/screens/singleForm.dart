@@ -18,7 +18,6 @@ class _SingleFormScreenState extends State<SingleFormScreen> {
         title: Text(form.name),
         centerTitle: true,
       ),
-      body: ,
     );
   }
 }

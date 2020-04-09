@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaire_flutter/widgets/errorDialog.dart';
 import 'package:questionnaire_flutter/widgets/formAspects.dart';
+import 'package:questionnaire_flutter/widgets/question_item.dart';
 
 class CreateFormScreen extends StatefulWidget {
   static const routeName = '/createForm';
@@ -129,6 +130,20 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
         listViewScrollController.position.maxScrollExtent * 2,
         duration: Duration(milliseconds: 200),
         curve: Curves.easeOut);
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    print(oldIndex);
+    print(newIndex);
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    setState(() {
+      final Map<String, dynamic> item = _questions.removeAt(oldIndex);
+      _questions.insert(newIndex, item);
+
+    });
+    print(_questions);
   }
 
   @override
@@ -447,47 +462,65 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                             child: Container(
                                               width: double.infinity,
                                               child: _questions.isNotEmpty ? ReorderableListView(
-                                                onReorder: null,
+                                               header: Container(
+                                                 padding: EdgeInsets.all(10.0),
+                                                 margin: EdgeInsets.only(bottom: 10.0),
+                                                 width: double.infinity,
+                                                 child: Text("Recently Added Questions", style: TextStyle(fontSize: 15.0), textAlign: TextAlign.center,),
+                                                 decoration: BoxDecoration(
+                                                   borderRadius: BorderRadius.only(
+                                                     bottomRight: Radius.elliptical(30, 70),
+                                                     bottomLeft: Radius.elliptical(30, 70),
+                                                   ),
+                                                   color: Colors.lightBlue
+                                                 ),
+                                               ) ,
+                                                onReorder: _onReorder,
+                                                scrollDirection: Axis.vertical,
+                                                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
                                                 // itemBuilder: (context, index) =>
-                                                 children:[
-                                                   Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    (_questions[index]["type"] == "Text") ? Container(
-                                                      margin: EdgeInsets.only(bottom: 10.0),
-                                                      width: double.infinity,
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Flexible(
-                                                            fit: FlexFit.tight,
-                                                            flex: 5,
-                                                            child: Container(alignment: Alignment.centerLeft, child: Text('${index + 1}. ${_questions[index]["text"]}')),
-                                                          ),
-                                                          Flexible(
-                                                            flex: 1,
-                                                            fit: FlexFit.tight,
-                                                            child: Container(
-                                                                alignment: Alignment.bottomRight,
-                                                                child: Text(_questions[index]["type"], style: TextStyle(fontSize: 15.0, color: Colors.blue),)
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ) :
-                                                        ExpansionTile(
-//                                                          leading: Text('${index + 1}. ${_questions[index]["text"]}', overflow: TextOverflow.fade,),
-                                                          title: _questions[index]["type"] == "Choice" ? Text("${_questions[index]["type"]}/${_questions[index]["choice_type"]}", overflow: TextOverflow.fade,) : Text(_questions[index]["type"], overflow: TextOverflow.fade,),
-                                                          children: _questions[index]["type"] == "Choice" ? _questions[index]["choices"].map<Widget>((choice) {
-                                                            return Text('${_questions[index]["choices"].indexOf(choice) + 1}. ${choice["controller"].text}');
-                                                          }).toList() : [
-                                                            Text('Low Threshold: ${_questions[index]["start_text"]}'),
-                                                            Text('High Threshold: ${_questions[index]["end_text"]}'),
-                                                          ],
-                                                        )
-                                                  ],
-                                                )
-                                                 ]
-                                                 ,
+                                                 children: _questions.map((question) {
+                                                   return Column(
+                                                     key: ValueKey(question["text"] + _questions.indexOf(question).toString()),
+                                                     children: <Widget>[
+                                                       Container(
+                                                         margin: EdgeInsets.only(bottom: 10.0),
+                                                         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
+                                                         decoration: BoxDecoration(
+                                                             color: Colors.white30,
+                                                             borderRadius: BorderRadius.circular(10.0)
+                                                         ),
+                                                         width: double.infinity,
+                                                         child: (question["type"] == "Text") ?  Row(
+                                                           children: <Widget>[
+                                                             Flexible(
+                                                               fit: FlexFit.tight,
+                                                               flex: 5,
+                                                               child: Container(alignment: Alignment.centerLeft, child: Text('${_questions.indexOf(question) + 1}. ${question["text"]}')),
+                                                             ),
+                                                             Flexible(
+                                                               flex: 1,
+                                                               fit: FlexFit.tight,
+                                                               child: Container(
+                                                                   alignment: Alignment.bottomRight,
+                                                                   child: Text(question["type"], style: TextStyle(fontSize: 15.0, color: Colors.blue),)
+                                                               ),
+                                                             ),
+                                                           ],
+                                                         ) : ExpansionTile(
+                                                           leading: Text('${_questions.indexOf(question) + 1}. ${question["text"]}', overflow: TextOverflow.fade,),
+                                                           title: question["type"] == "Choice" ? Text("${question["type"]}/${question["choice_type"]}", overflow: TextOverflow.fade,) : Text(question["type"], overflow: TextOverflow.fade,),
+                                                           children: question["type"] == "Choice" ? question["choices"].map<Widget>((choice) {
+                                                             return Text('${question["choices"].indexOf(choice) + 1}. ${choice["controller"].text}');
+                                                           }).toList() : [
+                                                             Text('Low Threshold: ${question["start_text"]}'),
+                                                             Text('High Threshold: ${question["end_text"]}'),
+                                                           ],
+                                                         ),
+                                                       )
+                                                     ],
+                                                   );
+                                                 }).toList(),
                                                 // itemCount: _questions.length,
                                               ) : Container(),
                                             ),
