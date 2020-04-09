@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:questionnaire_flutter/models/form.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:questionnaire_flutter/screens/singleForm.dart';
 
 class FormItem extends StatelessWidget {
   final myForm form;
@@ -15,7 +16,12 @@ class FormItem extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.all(Radius.circular(15.0)),
       splashColor: Colors.deepPurple,
-      onTap: () => {},
+      onTap: () => {
+        Navigator.of(context).pushNamed(
+          SingleFormScreen.routeName,
+          arguments: form
+        )
+      },
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
