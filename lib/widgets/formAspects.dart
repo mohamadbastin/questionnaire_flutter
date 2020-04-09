@@ -13,6 +13,7 @@ class _FormAspectsState extends State<FormAspects> {
     "is_active": false,
     "is_private": false,
     "is_repeated": false,
+    "password" : "",
     "times": []
   };
 
@@ -61,6 +62,7 @@ class _FormAspectsState extends State<FormAspects> {
 
   final FocusNode isRepeatedFocusNode = new FocusNode();
 
+  var ispv = 0;
 
   Widget _formField(String title, Function validator, String value,
       TextInputType textInputType, Function onSaved, FocusNode currFocusNode,
@@ -89,21 +91,23 @@ class _FormAspectsState extends State<FormAspects> {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text(
-              "Choose Notification Times",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18.0),
-            ),
-            actions: <Widget>[
-              RaisedButton(
-                child: Text("Done"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-            content: Container(
+          return Dialog(
+            // title: Text(
+            //   "Choose Notification Times",
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(fontSize: 18.0),
+            // ),
+            // actions: <Widget>[
+            //   RaisedButton(
+            //     child: Text("Done"),
+            //     onPressed: () {
+            //       Navigator.of(context).pop();
+            //     },
+            //   ),
+            // ],
+            child: StatefulBuilder(
+             builder: (BuildContext context, StateSetter setState) {
+             return Container(
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 5.0),
               child: ListView(
@@ -122,8 +126,8 @@ class _FormAspectsState extends State<FormAspects> {
                     );
                   }).toList()
               ),
-            ),
-          );
+            );},
+          ));
         }
     );
   }
@@ -220,6 +224,7 @@ class _FormAspectsState extends State<FormAspects> {
                   onChanged: (bool value) {
                     setState(() {
                       _formInfo["is_repeated"] = value;
+                      
                     });
                   },
                 ),
@@ -230,9 +235,15 @@ class _FormAspectsState extends State<FormAspects> {
                   onChanged: (bool value) {
                     setState(() {
                       _formInfo["is_private"] = value;
+                      if (value==true){
+                        ispv = 1;
+                      } else {
+                        ispv = 0;
+                      }
                     });
                   },
                 ),
+                ispv == 1 ? Container(child: TextFormField(decoration: InputDecoration(hintText: "Password"),),) : Container(),
                 Container(
                   margin: EdgeInsets.only(bottom: 10.0),
                   child: RaisedButton.icon(
