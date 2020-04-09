@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
+import 'package:questionnaire_flutter/widgets/settings.dart';
+
 class MainDrawer extends StatelessWidget {
   Widget _drawerListTile(String title, String routeName, BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        // Provider.of<Profile>(context, listen: false).logout();
+        Navigator.of(context).popAndPushNamed(routeName);
+      },
+    );
+  }
+
+  Widget _drawerListTileLogOut(String title, String routeName, BuildContext context) {
     return ListTile(
       title: Text(title),
       onTap: () {
@@ -22,7 +34,7 @@ class MainDrawer extends StatelessWidget {
               centerTitle: true,
               leading: IconButton(
                 icon: Icon(Icons.settings),
-                onPressed: null,
+                onPressed: null
               ),
               actions: <Widget>[
                 IconButton(icon: Icon(Icons.notifications), onPressed: null)
@@ -73,13 +85,13 @@ class MainDrawer extends StatelessWidget {
                     ],
                   ),
                 ))),
-            _drawerListTile('My Forms', '/recent', context),
+            _drawerListTile('Home', '/recent', context),
             Divider(),
             _drawerListTile('Filled Forms', '/auth', context),
             Divider(),
             _drawerListTile("Create Form", '/createForm', context),
             Divider(),
-            _drawerListTile("Logout", '/auth', context),
+            _drawerListTileLogOut("Logout", '/auth', context),
 
           ],
         ),
