@@ -6,6 +6,7 @@ class FormAspects extends StatefulWidget {
 }
 
 class _FormAspectsState extends State<FormAspects> {
+  bool isPrivate = false;
   final Map<String, dynamic> _formInfo = {
     "name": "",
     "description": "",
@@ -62,7 +63,8 @@ class _FormAspectsState extends State<FormAspects> {
 
   final FocusNode isRepeatedFocusNode = new FocusNode();
 
-  var ispv = 0;
+  final FocusNode passwordFocusNode = new FocusNode();
+
 
   Widget _formField(String title, Function validator, String value,
       TextInputType textInputType, Function onSaved, FocusNode currFocusNode,
@@ -215,7 +217,7 @@ class _FormAspectsState extends State<FormAspects> {
                       _formInfo["estimated_time"] = value;
                     },
                     estimatedTimeFocusNode,
-                    isRepeatedFocusNode
+                    passwordFocusNode,
                 ),
                 CheckboxListTile(
                   activeColor: Colors.blueGrey,
@@ -235,15 +237,27 @@ class _FormAspectsState extends State<FormAspects> {
                   onChanged: (bool value) {
                     setState(() {
                       _formInfo["is_private"] = value;
-                      if (value==true){
-                        ispv = 1;
-                      } else {
-                        ispv = 0;
-                      }
+                      isPrivate = value;
                     });
                   },
                 ),
-                ispv == 1 ? Container(child: TextFormField(decoration: InputDecoration(hintText: "Password"),),) : Container(),
+                isPrivate ? _formField(
+                    "Password",
+                        (String value) {
+                      if (value.isEmpty) {
+                        return "Requried";
+                      }
+                      return null;
+                    },
+                    _formInfo["password"],
+                    TextInputType.text,
+                        (value) {
+                      _formInfo["password"] = value;
+                    },
+                    passwordFocusNode,
+                    estimatedTimeFocusNode
+
+                ) : Container(),
                 Container(
                   margin: EdgeInsets.only(bottom: 10.0),
                   child: RaisedButton.icon(
@@ -261,29 +275,30 @@ class _FormAspectsState extends State<FormAspects> {
                     },
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  child: RaisedButton(
-                    elevation: 10.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.elliptical(100, 20),
-                            topRight: Radius.elliptical(100, 20))),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    onPressed: () {
-
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: Text(
-                        "Create Form",
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                    ),
-                  ),
-                ),
           ])
-          )]
+          ),
+          Container(
+            width: double.infinity,
+            child: RaisedButton(
+              elevation: 10.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.elliptical(100, 20),
+                      topRight: Radius.elliptical(100, 20))),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              onPressed: () {
+
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Text(
+                  "Create Form",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+            ),
+          ),
+        ]
       ),
     );
   }
