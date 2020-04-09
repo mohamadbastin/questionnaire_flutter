@@ -16,7 +16,7 @@ class FormItem extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(15.0)),
       splashColor: Colors.deepPurple,
       onTap: () => {
-        Navigator.pushNamed(context, '/form', arguments: form)
+        Navigator.pushNamed(context, '/singleForm', arguments: form)
       },
       child: Hero(
         tag: form.name+form.author.name,
