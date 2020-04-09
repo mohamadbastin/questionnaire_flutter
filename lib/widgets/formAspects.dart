@@ -13,6 +13,7 @@ class _FormAspectsState extends State<FormAspects> {
     "is_active": false,
     "is_private": false,
     "is_repeated": false,
+    "password" : "",
     "times": []
   };
 
@@ -61,6 +62,7 @@ class _FormAspectsState extends State<FormAspects> {
 
   final FocusNode isRepeatedFocusNode = new FocusNode();
 
+  var ispv = 0;
 
   Widget _formField(String title, Function validator, String value,
       TextInputType textInputType, Function onSaved, FocusNode currFocusNode,
@@ -222,6 +224,7 @@ class _FormAspectsState extends State<FormAspects> {
                   onChanged: (bool value) {
                     setState(() {
                       _formInfo["is_repeated"] = value;
+                      
                     });
                   },
                 ),
@@ -232,9 +235,15 @@ class _FormAspectsState extends State<FormAspects> {
                   onChanged: (bool value) {
                     setState(() {
                       _formInfo["is_private"] = value;
+                      if (value==true){
+                        ispv = 1;
+                      } else {
+                        ispv = 0;
+                      }
                     });
                   },
                 ),
+                ispv == 1 ? Container(child: TextFormField(decoration: InputDecoration(hintText: "Password"),),) : Container(),
                 Container(
                   margin: EdgeInsets.only(bottom: 10.0),
                   child: RaisedButton.icon(
