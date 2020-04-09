@@ -210,26 +210,39 @@ class _RecentFormsState extends State<RecentForms> {
                                         children: <Widget>[
                                           Container(
                                               // color: Colors.blue,
-                                              child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                Icon(
-                                                  Icons.library_books,
-                                                  color: Colors.black,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(1),
-                                                ),
-                                                Text(
-                                                  myFormsList[i].name,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
-                                              ])),
+                                              child: Padding(padding: EdgeInsets.only(top: 6),
+                                                                                              child: Row(
+                                                  
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                  Icon(
+                                                    Icons.library_books,
+                                                    color: Colors.black,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.all(1),
+                                                  ),
+                                                  Text(
+                                                    myFormsList[i]
+                                                              .name
+                                                              .length >
+                                                          23
+                                                      ? "..." + myFormsList[i]
+                                                              .name
+                                                              .substring(
+                                                                  0, 20)
+                                                          
+                                                      : myFormsList[i]
+                                                          .name,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ]),
+                                              )),
                                           Container(
                                               // color: Colors.blue,
                                               child: Row(
