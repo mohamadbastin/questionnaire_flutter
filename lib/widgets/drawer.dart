@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
+import 'package:questionnaire_flutter/widgets/settings.dart';
 class MainDrawer extends StatelessWidget {
   Widget _drawerListTile(String title, String routeName, BuildContext context) {
     return ListTile(
@@ -11,6 +12,21 @@ class MainDrawer extends StatelessWidget {
       },
     );
   }
+
+  _openSettingsModal(BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        elevation: 10,
+        context: context,
+        builder: (context) => GestureDetector(
+          onDoubleTap: () {
+            Navigator.of(context).pop();
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Settings(),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,7 +38,10 @@ class MainDrawer extends StatelessWidget {
               centerTitle: true,
               leading: IconButton(
                 icon: Icon(Icons.settings),
-                onPressed: null,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _openSettingsModal(context);
+                },
               ),
               actions: <Widget>[
                 IconButton(icon: Icon(Icons.notifications), onPressed: null)
@@ -38,8 +57,8 @@ class MainDrawer extends StatelessWidget {
                     ],
                     ),
                     borderRadius: BorderRadius.only(
-                      bottomRight: Radius.elliptical(100, 50),
-                      bottomLeft: Radius.elliptical(100, 50),
+                      bottomRight: Radius.elliptical(200, 100),
+                      bottomLeft: Radius.elliptical(200, 100),
                     )
                   ),
                     child: Container(

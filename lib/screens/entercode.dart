@@ -35,24 +35,19 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
   String _phone;
   Future<void> make;
 
-  verifycode(String pinn){
+  verifycode(String pinn) async {
       setState(() {
         pin = pinn;
       });
 
       _phone = Provider.of<Profile>(context, listen: false).phone;
-      try{
-          make = Provider.of<Profile>(context, listen: false).login(pin, _phone);
-          Navigator.popAndPushNamed(context, '/recent');
-          
-      }
-      on SocketException catch(e){
-        print("no net");
+      Provider.of<Profile>(context, listen: false).login(pin, _phone).then((resp) {
+        Navigator.popAndPushNamed(context, '/recent');
+
+      }).catchError((e) {
         _showMessageDialog('Cannot Connect To Server');
-
-      }
+      });
       
-
   }
 
   @override

@@ -45,28 +45,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   Animation<double> animation;         
   AnimationController controller;
-  bool _auth;
-  String route;
-  Future<bool> _autologin;
-
 
   void navigationPage(){
     controller.dispose();
 
-    Navigator.of(context).popAndPushNamed(route);
+    Navigator.of(context).popAndPushNamed("/auth");
   }
 
   startTime() async {
     var _duration = new Duration(seconds: 3);
     return new Timer(_duration, navigationPage);
-  }
-
-  routemaker() async {
-    if (_auth || await _autologin){
-        route = '/recent';
-      } else{
-        route = '/auth';
-      }
   }
 
   @override
@@ -87,10 +75,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
 
           controller.forward();
-      _auth = Provider.of<Profile>(context, listen: false).isAuth;
-      _autologin = Provider.of<Profile>(context, listen: false).autologin();
-
-      routemaker();
+//      _auth = Provider.of<Profile>(context, listen: false).isAuth;
+//      _autologin = Provider.of<Profile>(context, listen: false).autologin();
+//
+//      routemaker();
 
     }
 

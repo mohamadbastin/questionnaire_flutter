@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
+import 'package:questionnaire_flutter/screens/ErrorScreen.dart';
 import 'package:questionnaire_flutter/screens/createForm.dart';
 import 'package:questionnaire_flutter/screens/entercode.dart';
 import 'package:questionnaire_flutter/screens/form.dart';
@@ -81,8 +82,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     
-    return Scaffold(
-        body: SplashScreen(),
+    return Consumer<Profile>(
+        builder: (context, profile, child) => profile.isAuth ? RecentFormsScreen() : FutureBuilder(
+            future: profile.autologin(),
+            builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting ?
+            Scaffold(
+                body: Center(child: CircularProgressIndicator(),)
+            ) : snapshot.hasError ? Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text("Connection Failed!"),
+                elevation: 5,
+                backgroundColor: Colors.red,
+              ),
+              body: ErrorScreen(),
+            ): snapshot.data ? RecentFormsScreen()
+                : AuthScreen()
+        )
     );
   }
 }
