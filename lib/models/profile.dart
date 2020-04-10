@@ -41,7 +41,7 @@ class Profile with ChangeNotifier {
         }),
         headers: {
           'Content-Type': 'application/json',
-        }).then((value) => null);
+        }).then((value) => print(value.body));
     print("sending code");
   }
 
