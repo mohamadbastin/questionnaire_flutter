@@ -12,7 +12,9 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   TextEditingController phoneController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
   var focusNode = new FocusNode();
+  var focusNode2 = new FocusNode();
   String that = "next";
   Profile _pro;
 
@@ -25,7 +27,8 @@ class _AuthScreenState extends State<AuthScreen> {
       });
       if (phoneController.text.length == 10 && phoneController.text[0] == "9") {
         _pro = Provider.of<Profile>(context, listen: false);
-        _pro.sendCode("+98" + phoneController.text);
+        _pro.sendCode("+98" + phoneController.text, nameController.text);
+        
         _pro.phone = "+98" + phoneController.text;
         Navigator.pushNamed(context, '/entercode');
         setState(() {
@@ -129,29 +132,59 @@ class _AuthScreenState extends State<AuthScreen> {
               //   backgroundBlendMode: BlendMode.clear,
               // ),
               width: MediaQuery.of(context).size.width * 0.8,
-              child: TextField(
-                  controller: phoneController,
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.done,
-                  focusNode: focusNode,
-                  autofocus: true,
-                  // readOnly: that=="next"? false : true,
-                  // enabled: that=="next"? false : true,
-                  enabled: true,
-                  // enabled: enabletext() ,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(
-                      Icons.phone,
-                      color: Colors.white,
-                    ),
-                    // labelText: 'Enter Your Phone Number',
-                    // enabledBorder: UnderlineInputBorder(
-                    //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
-                    // hintText: 'Enter Your Phone Number',
-                    prefix: Text('+98'),
-                    hintStyle: TextStyle(color: Colors.white),
-                  )),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                      controller: nameController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      focusNode: focusNode2,
+                      autofocus: true,
+                      // readOnly: that=="next"? false : true,
+                      // enabled: that=="next"? false : true,
+                      enabled: true,
+                      // enabled: enabletext() ,
+                      decoration: InputDecoration(
+                        hintText: 'Name',
+                        border: InputBorder.none,
+                        prefixIcon: Icon(
+                          Icons.account_box,
+                          color: Colors.white,
+                        ),
+                        // labelText: 'Enter Your Phone Number',
+                        // enabledBorder: UnderlineInputBorder(
+                        //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
+                        // hintText: 'Enter Your Phone Number',
+                        // prefix: Text('+98'),
+                        hintStyle: TextStyle(color: Colors.white),
+                      ))
+                  ,Padding(padding: EdgeInsets.only(top: 30)),
+                  TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.done,
+                      focusNode: focusNode,
+                      autofocus: true,
+                      // readOnly: that=="next"? false : true,
+                      // enabled: that=="next"? false : true,
+                      enabled: true,
+                      // enabled: enabletext() ,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        // hintText: '+98',
+                        prefixIcon: Icon(
+                          Icons.phone,
+                          color: Colors.white,
+                        ),
+                        // labelText: 'Enter Your Phone Number',
+                        // enabledBorder: UnderlineInputBorder(
+                        //     borderSide: BorderSide(color: Colors.black, width: 0.0)),
+                        // hintText: 'Enter Your Phone Number',
+                        prefix: Text('+98'),
+                        hintStyle: TextStyle(color: Colors.white),
+                      )),
+                ],
+              ),
 
             ),
                 Container(

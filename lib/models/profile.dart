@@ -33,10 +33,11 @@ class Profile with ChangeNotifier {
     return true;
   }
 
-  Future<void> sendCode(String phone) async {
+  Future<void> sendCode(String phone, String name) async {
     await http.post("$host/register/",
         body: json.encode({
           'phone': phone,
+        'name': name
         }),
         headers: {
           'Content-Type': 'application/json',
