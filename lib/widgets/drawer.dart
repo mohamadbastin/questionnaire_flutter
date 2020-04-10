@@ -104,7 +104,7 @@ class MainDrawer extends StatelessWidget {
                 ))),
             _drawerListTile('Home', '/recent', context),
             Divider(),
-            _drawerListTile('Filled Forms', '/auth', context),
+            _drawerListTile('Active Forms', '/auth', context),
             Divider(),
             _drawerListTile("Create Form", '/createForm', context),
             Divider(),

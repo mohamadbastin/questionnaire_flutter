@@ -57,8 +57,10 @@ class FormProvider with ChangeNotifier {
         // print();
         times.add(int.parse(form['time'][j]['hour']));
       }
-      // print(4);
+      print(4);
+      print(form['is_private']);
       // print(times.length);
+
 
       extractedList.add(myForm(
         id: form['id'],
@@ -66,7 +68,7 @@ class FormProvider with ChangeNotifier {
         author: tmp_profile,
         description: form['description'],
         is_active: form['is_active'],
-        is_private: form['ia_private'],
+        is_private: form['is_private'],
         is_repeated: form['is_repeated'],
         created: form['created'],
         estimated_time: form['estimated_time'],

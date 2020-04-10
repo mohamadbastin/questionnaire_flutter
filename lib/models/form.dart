@@ -10,7 +10,7 @@ class myForm with ChangeNotifier {
   String name;
   final Profile author;
   String description;
-  bool is_private;
+  final bool is_private;
   final String created;
   int estimated_time;
   bool is_repeated;
