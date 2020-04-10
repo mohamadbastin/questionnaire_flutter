@@ -447,6 +447,10 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                           context: context,
                                           builder: (context) {
                                             return Dialog(
+                                              elevation: 10,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10.0),
+                                              ),
                                               child: StatefulBuilder(
                                                     builder: (BuildContext context, StateSetter setState) {
                                               return Container(
@@ -474,46 +478,120 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                                   padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
                                                   // itemBuilder: (context, index) =>
                                                    children: _questions.map((question) {
-                                                     return Container(
-                                                       height: 90,
-                                                       key: ValueKey(question["text"] + _questions.indexOf(question).toString()),
-                                                       margin: EdgeInsets.only(bottom: 10.0),
-                                                       padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
-                                                       decoration: BoxDecoration(
-                                                           color: Colors.white30,
-                                                           borderRadius: BorderRadius.circular(10.0)
-                                                       ),
-                                                       width: double.infinity,
-                                                       child: (question["type"] == "Text") ?  Row(
-                                                         children: <Widget>[
-                                                           Flexible(
-                                                             fit: FlexFit.tight,
-                                                             flex: 5,
-                                                             child: Container(alignment: Alignment.centerLeft, child: Text('${_questions.indexOf(question) + 1}. ${question["text"]}')),
-                                                           ),
-                                                           Flexible(
-                                                             flex: 1,
-                                                             fit: FlexFit.tight,
-                                                             child: Container(
-                                                                 alignment: Alignment.bottomRight,
-                                                                 child: Text(question["type"], style: TextStyle(fontSize: 15.0, color: Colors.blue),)
+                                                     return question["type"] == "Text" ? Dismissible(
+                                                       background: Container(
+                                                         margin: EdgeInsets.all(10.0),
+                                                         decoration: BoxDecoration(
+                                                             borderRadius: BorderRadius.circular(10.0),
+                                                             gradient: LinearGradient(
+                                                                 colors: [
+                                                                   Colors.red,
+                                                                   Colors.redAccent
+                                                                 ]
+                                                             )
+                                                         ),
+                                                         child: Container(
+                                                           margin: EdgeInsets.only(left: 20.0),
+                                                           child: Align(
+                                                             alignment: Alignment.centerLeft,
+                                                             child: Icon(
+                                                               Icons.delete,
+                                                               color: Colors.white,
                                                              ),
                                                            ),
-                                                         ],
-                                                       ) : ExpansionTile(
-                                                         leading: Text('${_questions.indexOf(question) + 1}. ${question["text"]}', overflow: TextOverflow.fade,),
-                                                         title: question["type"] == "Choice" ? Text("${question["type"]}/${question["choice_type"]}", overflow: TextOverflow.fade,) : Text(question["type"], overflow: TextOverflow.fade,),
-                                                         children: question["type"] == "Choice" ? question["choices"].map<Widget>((choice) {
-                                                           return Text('${question["choices"].indexOf(choice) + 1}. ${choice["controller"].text}');
-                                                         }).toList() : [
-                                                           Text('Low Threshold: ${question["start_text"]}'),
-                                                           Text('High Threshold: ${question["end_text"]}'),
-                                                         ],
+                                                         ),
+                                                       ),
+                                                       key: Key(question["text"] + _questions.indexOf(question).toString() + "remove"),
+                                                       direction: DismissDirection.startToEnd,
+                                                       onDismissed: (dir) {
+                                                         setState(() {
+                                                           _questions.remove(question);
+                                                         });
+                                                       },
+                                                       child: Container(
+                                                           height: 80,
+                                                           key: ValueKey(question["text"] + _questions.indexOf(question).toString()),
+                                                           margin: EdgeInsets.only(bottom: 10.0),
+                                                           padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
+                                                           decoration: BoxDecoration(
+                                                               color: Colors.white30,
+                                                               borderRadius: BorderRadius.circular(10.0)
+                                                           ),
+                                                           width: double.infinity,
+                                                           child: Row(
+                                                             children: <Widget>[
+                                                               Flexible(
+                                                                 fit: FlexFit.tight,
+                                                                 flex: 5,
+                                                                 child: Container(alignment: Alignment.centerLeft, child: Text('${_questions.indexOf(question) + 1}. ${question["text"]}')),
+                                                               ),
+                                                               Flexible(
+                                                                 flex: 1,
+                                                                 fit: FlexFit.tight,
+                                                                 child: Container(
+                                                                     alignment: Alignment.bottomRight,
+                                                                     child: Text(question["type"], style: TextStyle(fontSize: 15.0, color: Colors.blue),)
+                                                                 ),
+                                                               ),
+                                                             ],
+                                                           )
+                                                       ),
+                                                     ) : Dismissible(
+                                                       background: Container(
+                                                         margin: EdgeInsets.all(10.0),
+                                                         decoration: BoxDecoration(
+                                                             borderRadius: BorderRadius.circular(10.0),
+                                                             gradient: LinearGradient(
+                                                                 colors: [
+                                                                   Colors.red,
+                                                                   Colors.redAccent
+                                                                 ]
+                                                             )
+                                                         ),
+                                                         child: Container(
+                                                           margin: EdgeInsets.only(left: 20.0),
+                                                           child: Align(
+                                                             alignment: Alignment.centerLeft,
+                                                             child: Icon(
+                                                               Icons.delete,
+                                                               color: Colors.white,
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ),
+                                                       key: Key(question["text"] + _questions.indexOf(question).toString() + "remove"),
+                                                       direction: DismissDirection.startToEnd,
+                                                       onDismissed: (dir) {
+                                                         setState(() {
+                                                           _questions.remove(question);
+                                                         });
+                                                       },
+                                                       child: Container(
+                                                         key: ValueKey(question["text"] + _questions.indexOf(question).toString()),
+                                                         margin: EdgeInsets.only(bottom: 10.0),
+                                                         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
+                                                         decoration: BoxDecoration(
+                                                             color: Colors.white30,
+                                                             borderRadius: BorderRadius.circular(10.0)
+                                                         ),
+                                                         width: double.infinity,
+                                                         child: ExpansionTile(
+                                                           leading: Text('${_questions.indexOf(question) + 1}. ${question["text"]}', overflow: TextOverflow.fade,),
+                                                           title: question["type"] == "Choice" ? Text("${question["type"]}/${question["choice_type"]}", overflow: TextOverflow.fade,) : Text(question["type"], overflow: TextOverflow.fade,),
+                                                           children: question["type"] == "Choice" ? question["choices"].map<Widget>((choice) {
+                                                             return Text('${question["choices"].indexOf(choice) + 1}. ${choice["controller"].text}');
+                                                           }).toList() : [
+                                                             Text('Low Threshold: ${question["start_text"]}'),
+                                                             Text('High Threshold: ${question["end_text"]}'),
+                                                           ],
+                                                         ),
                                                        ),
                                                      );
                                                    }).toList(),
                                                   // itemCount: _questions.length,
-                                                ) : Container(),
+                                                ) : Center(
+                                                  child: Icon(FontAwesomeIcons.boxOpen),
+                                                ),
                                               );}),
                                             );
                                           }

@@ -29,6 +29,7 @@ dependencies:
   pinput: ^0.1.10
   font_awesome_flutter: ^8.8.1
   intl: ^0.15.8
+  reorderables: ^0.3.2
 
 
 dev_dependencies:
