@@ -50,7 +50,7 @@ class _ActiveFormsState extends State<ActiveForms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
         appBar: AppBar(
           elevation: 5,
           title: Text("Active Forms"),

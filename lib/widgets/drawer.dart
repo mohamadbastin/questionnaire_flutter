@@ -113,9 +113,11 @@ class MainDrawer extends StatelessWidget {
             Divider(),
             _drawerListTile('Active Forms', '/active', context),
             Divider(),
-            _drawerListTile('My Forms', '/auth', context),
+            _drawerListTile('My Forms', '/myform', context),
             Divider(),
             _drawerListTile("Create Form", '/createForm', context),
+            Divider(),
+            _drawerListTile("Reports", '/report1', context),
             Divider(),
             // ListTile(
             //   onTap: () => launch("tel://+989379852503"),

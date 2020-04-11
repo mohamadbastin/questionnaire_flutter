@@ -8,13 +8,13 @@ import 'package:questionnaire_flutter/widgets/myform_item.dart';
 
 
 
-class MyFormsSceen extends StatefulWidget {
-  static final routeName = "/myform";
+class ChooseFormsSceen extends StatefulWidget {
+  static final routeName = "/chooseform";
   @override
-  _MyFormsSceenState createState() => _MyFormsSceenState();
+  _ChooseFormsSceenState createState() => _ChooseFormsSceenState();
 }
 
-class _MyFormsSceenState extends State<MyFormsSceen> {
+class _ChooseFormsSceenState extends State<ChooseFormsSceen> {
   @override
   Widget build(BuildContext context) {
     final form = Provider.of<FormProvider>(context, listen: false);
@@ -54,14 +54,14 @@ class _MyFormsState extends State<MyForms> {
       // drawer: MainDrawer(),
         appBar: AppBar(
           elevation: 5,
-          title: Text("My Forms"),
+          title: Text("Choose Form..."),
           centerTitle: true,
         ),
         body: Container(
           margin: EdgeInsets.all(5.0),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return MyFormItem(form: mymyFormsList[index],);
+              return ChooseFormItem(form: mymyFormsList[index],);
             },
             itemCount: mymyFormsList.length,
           ),
