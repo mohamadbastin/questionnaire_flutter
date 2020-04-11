@@ -7,6 +7,7 @@ import 'package:questionnaire_flutter/screens/ErrorScreen.dart';
 import 'package:questionnaire_flutter/screens/createForm.dart';
 import 'package:questionnaire_flutter/screens/entercode.dart';
 import 'package:questionnaire_flutter/screens/form.dart';
+import 'package:questionnaire_flutter/screens/formQuestionsScreen.dart';
 import 'package:questionnaire_flutter/screens/singleForm.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
           CreateFormScreen.routeName: (_) => CreateFormScreen(),
           SingleFormScreen.routeName: (_) => SingleFormScreen(),
           FormScreen.routeName: (_) => FormScreen(),
-          
+          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen()
         },
       ),
     );

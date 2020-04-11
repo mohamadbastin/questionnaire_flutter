@@ -72,7 +72,7 @@ class FormProvider with ChangeNotifier {
         is_repeated: form['is_repeated'],
         created: form['created'],
         estimated_time: form['estimated_time'],
-        duration: form['duration'],
+        duration: form['duration_days'],
         times: times
       
       ));
@@ -83,6 +83,24 @@ class FormProvider with ChangeNotifier {
     // print(_myForms);
     // print(_myForms.length);
     notifyListeners();
+  }
+
+  Future<void> fetchFormQuestions(int formId) async {
+    print("formId" + formId.toString());
+    http.get(
+        host + "/form/questions/$formId",
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+
+    ).then((response) {
+      print(response.body);
+      print("hi all");
+    }).catchError((error) {
+      print(error);
+    });
   }
 
   myForm findById(int id) {
