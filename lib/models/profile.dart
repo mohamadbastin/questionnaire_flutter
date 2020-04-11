@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:questionnaire_flutter/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
+Profile myProfilee = Profile(name: "boz");
 String authtoken;
 class Profile with ChangeNotifier {
   int id;
@@ -46,6 +46,22 @@ class Profile with ChangeNotifier {
   }
 
   Future<void> login(String pin, String phone) async {
+    final res = await http.post("$host/login/",
+        body: json.encode({'username': phone, 'password': pin}),
+        headers: {
+          'Content-Type': 'application/json',
+        });
+    print("got in");
+
+    print(res);
+    print(res.body);
+    token = json.decode(res.body)['token'];
+    print(authtoken);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('askfilltoken', token);
+    authtoken = token;
+
+    await getProfile();
     try {
       final res = await http.post("$host/login/",
           body: json.encode({'username': phone, 'password': pin}),
@@ -94,11 +110,39 @@ class Profile with ChangeNotifier {
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
-        }).then((value) {
-          print (value.body);
-          return value;
         });
-    print("participating");
+        print("participating");
+        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+
+
+  }
+
+
+  Future<String> removeParticipate(int fid) async {
+    String formid = fid.toString();
+    var res = await http.post("$host/removeparticipate/$formid",
+        body: json.encode({
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        });
+        print("removing participating");
+        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+
+
+  }
+
+  Future<void> getProfile() async {
+    var res = await http.get("$host/profile/",
+
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        });
+        print("profiling");
+        var b =json.decode(res.body);
+        myProfilee.name = b["name"];
   
   } 
 }

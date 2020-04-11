@@ -13,6 +13,7 @@ import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
 import 'screens/authScreen.dart';
 import 'screens/singleForm.dart';
+import 'screens/ActiveForms.dart';
 
 void main() => runApp(MyApp());
 
@@ -67,7 +68,8 @@ class MyApp extends StatelessWidget {
           CreateFormScreen.routeName: (_) => CreateFormScreen(),
           SingleFormScreen.routeName: (_) => SingleFormScreen(),
           FormScreen.routeName: (_) => FormScreen(),
-          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen()
+          ActiveFormsSceen.routeName: (_) => ActiveFormsSceen(),
+          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen(),
         },
       ),
     );
