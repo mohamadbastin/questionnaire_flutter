@@ -32,7 +32,7 @@ class _ActiveFormsSceenState extends State<ActiveFormsSceen> {
   }
 }
 
-// TODO add delete function is ready in profile named removeParticipate(form id)
+// TODO add delete dismissable is ready in profile named removeParticipate(form id)
 
 class ActiveForms extends StatefulWidget {
   @override
