@@ -105,7 +105,6 @@ class Profile with ChangeNotifier {
     await http.post("$host/participate/$formid",
         body: json.encode({
           'password':password,
-        
         }),
         headers: {
           'Content-Type': 'application/json',
