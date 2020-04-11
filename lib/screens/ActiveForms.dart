@@ -49,6 +49,7 @@ class _ActiveFormsState extends State<ActiveForms> {
 
   @override
   Widget build(BuildContext context) {
+    final profile = Provider.of<Profile>(context, listen: false);
     return Scaffold(
       drawer: MainDrawer(),
         appBar: AppBar(
@@ -60,7 +61,37 @@ class _ActiveFormsState extends State<ActiveForms> {
           margin: EdgeInsets.all(5.0),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return FormItem(form: activeFormsList[index],);
+              return Dismissible(
+                key: Key('$index'),
+                background: Container(
+                  margin: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      gradient: LinearGradient(
+                          colors: [
+                            Colors.red,
+                            Colors.redAccent
+                          ]
+                      )
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 50.0,
+                      ),
+                    ),
+                  ),
+                ),
+                direction: DismissDirection.startToEnd,
+                child: FormItem(form: activeFormsList[index],),
+                onDismissed: (dir) async {
+                  await profile.removeParticipate(activeFormsList[index].id);
+              },
+              );
             },
             itemCount: activeFormsList.length,
           ),

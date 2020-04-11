@@ -29,6 +29,7 @@ class Profile with ChangeNotifier {
     // add other information
     token = prefs.getString("askfilltoken");
     authtoken = token;
+    await getProfile();
     notifyListeners();
     return true;
   }
@@ -37,7 +38,7 @@ class Profile with ChangeNotifier {
     await http.post("$host/register/",
         body: json.encode({
           'phone': phone,
-        'name': name
+          'name': name
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -62,28 +63,7 @@ class Profile with ChangeNotifier {
     authtoken = token;
 
     await getProfile();
-    try {
-      final res = await http.post("$host/login/",
-          body: json.encode({'username': phone, 'password': pin}),
-          headers: {
-            'Content-Type': 'application/json',
-          });
-      print(res);
-      print(res.body);
-      token = json.decode(res.body)['token'];
-      print(authtoken);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('askfilltoken', token);
-      authtoken = token;
-    } catch(e) {
-      print("here");
-      print(e);
-    }
     notifyListeners();
-
-    print("got in");
-
-
   }
 
   Future<void> logout() async {
@@ -100,9 +80,9 @@ class Profile with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<http.Response> participate(String password, int fid) async {
+  Future<String> participate(String password, int fid) async {
     String formid = fid.toString();
-    await http.post("$host/participate/$formid",
+    var res = await http.post("$host/participate/$formid",
         body: json.encode({
           'password':password,
         }),
@@ -110,8 +90,8 @@ class Profile with ChangeNotifier {
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
         });
-        print("participating");
-        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+    print("participating");
+    if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
 
 
   }
@@ -126,8 +106,8 @@ class Profile with ChangeNotifier {
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
         });
-        print("removing participating");
-        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+    print("removing participating");
+    if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
 
 
   }
@@ -139,9 +119,9 @@ class Profile with ChangeNotifier {
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
         });
-        print("profiling");
-        var b =json.decode(res.body);
-        myProfilee.name = b["name"];
-  
-  } 
+    print("profiling");
+    var b =json.decode(res.body);
+    myProfilee.name = b["name"];
+
+  }
 }

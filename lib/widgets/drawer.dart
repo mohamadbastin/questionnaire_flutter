@@ -45,7 +45,7 @@ class MainDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             AppBar(
               title: Text("AskFill"),
@@ -78,7 +78,6 @@ class MainDrawer extends StatelessWidget {
                     child: Container(
                       height: 150,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Container(
                             // alignment: Alignment.centerLeft,
@@ -99,6 +98,7 @@ class MainDrawer extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: 10.0,),
                           Container(
                             // height: 30,
                             // width: 200,
@@ -121,14 +121,14 @@ class MainDrawer extends StatelessWidget {
             //   onTap: () => launch("tel://+989379852503"),
             //   title: Text('تماس با ما', textDirection: TextDirection.rtl),
             // ),
-            // _drawerListTileLogOut("Logout", '/auth', context),
-            RaisedButton(
-              onPressed: () {
-                Provider.of<Profile>(context, listen: false).logout();
-                Navigator.of(context).popAndPushNamed('/auth');
-              },
-              child: Text('Log Out'),
-            )
+             _drawerListTileLogOut("Logout", '/auth', context),
+//            RaisedButton(
+//              onPressed: () {
+//                Provider.of<Profile>(context, listen: false).logout();
+//                Navigator.of(context).popAndPushNamed('/auth');
+//              },
+//              child: Text('Log Out'),
+//            )
           ],
         ),
       ),

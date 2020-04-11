@@ -33,10 +33,10 @@ class _FormScreenState extends State<FormScreen> {
                 //   borderRadius: BorderRadius.circular(10.0),
                 // ),
                 child: SizedBox(
-              height: 30,
-              width: 30,
-              child: LinearProgressIndicator(),
-            ));
+                  height: 30,
+                  width: 30,
+                  child: LinearProgressIndicator(),
+                ));
           });
 
       final _pro = Provider.of<Profile>(context, listen: false);
@@ -49,25 +49,25 @@ class _FormScreenState extends State<FormScreen> {
         Navigator.pop(context);
         // passf.requestFocus();
         showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-                elevation: 10,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(10.0),
-                // ),
-                child: SizedBox(
-              height: 80,
-              width: 30,
-              child: Column(
-                children: <Widget>[
-                  Text("password is wrong!"),
-                  SizedBox(height: 15,),
-                  RaisedButton(onPressed: ()=>Navigator.pop(context), child: Text("ok"),)
-                ],
-              ),
-            ));
-          });
+            context: context,
+            builder: (context) {
+              return Dialog(
+                  elevation: 10,
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(10.0),
+                  // ),
+                  child: SizedBox(
+                    height: 80,
+                    width: 30,
+                    child: Column(
+                      children: <Widget>[
+                        Text("password is wrong!"),
+                        SizedBox(height: 15,),
+                        RaisedButton(onPressed: ()=>Navigator.pop(context), child: Text("ok"),)
+                      ],
+                    ),
+                  ));
+            });
       }
     }
 
@@ -137,7 +137,7 @@ class _FormScreenState extends State<FormScreen> {
                         Padding(
                             padding: EdgeInsets.all(10),
                             child: Container(
-                                // height: 300,
+                              // height: 300,
                                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Container(
                                   // color:Colors.red,
@@ -146,15 +146,15 @@ class _FormScreenState extends State<FormScreen> {
                                     children: <Widget>[
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                MainAxisAlignment.start,
                                                 children: <Widget>[
                                                   Icon(Icons.timer),
                                                   SizedBox(
@@ -170,7 +170,7 @@ class _FormScreenState extends State<FormScreen> {
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                                 children: <Widget>[
                                                   Icon(Icons.calendar_today),
                                                   SizedBox(
@@ -178,14 +178,14 @@ class _FormScreenState extends State<FormScreen> {
                                                   ),
                                                   Container(
                                                     child: Text(
-                                                        // DateFormat.yMMMEd().format(DateTime.parse(form.created)),
+                                                      // DateFormat.yMMMEd().format(DateTime.parse(form.created)),
 
                                                         intl.DateFormat.yMMMMd()
                                                             .format(DateTime
-                                                                .parse(form
-                                                                    .created))
-                                                        // form.created
-                                                        ),
+                                                            .parse(form
+                                                            .created))
+                                                      // form.created
+                                                    ),
                                                   )
                                                 ],
                                               ),
@@ -224,7 +224,7 @@ class _FormScreenState extends State<FormScreen> {
                                           ),
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
@@ -336,7 +336,7 @@ class _FormScreenState extends State<FormScreen> {
                                                 child: Directionality(
                                                   // TODO
                                                   textDirection:
-                                                      TextDirection.rtl,
+                                                  TextDirection.rtl,
                                                   child: Text(
                                                     form.description,
                                                     //  textDirection:,
@@ -353,14 +353,14 @@ class _FormScreenState extends State<FormScreen> {
                                         height: 20.0,
                                       ),
                                       form.is_private == true
-                                          ? TextFormField(
-                                              onChanged: (value) =>
-                                                  setState(() {}),
-                                              controller: pass,
-                                              decoration: InputDecoration(
-                                                  prefixIcon:
-                                                      Icon(Icons.lock_outline),
-                                                  hintText: "password"))
+                                          ? TextField(
+                                          onChanged: (value) =>
+                                              setState(() {}),
+                                          controller: pass,
+                                          decoration: InputDecoration(
+                                              prefixIcon:
+                                              Icon(Icons.lock_outline),
+                                              hintText: "password"))
                                           : Container(),
                                       SizedBox(
                                         height: 30.0,
@@ -370,14 +370,14 @@ class _FormScreenState extends State<FormScreen> {
                                         child: RaisedButton(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
-                                              topRight:
+                                                  topRight:
                                                   Radius.elliptical(100, 70),
-                                              topLeft:
+                                                  topLeft:
                                                   Radius.elliptical(100, 70),
-                                            )),
+                                                )),
                                             materialTapTargetSize:
-                                                MaterialTapTargetSize
-                                                    .shrinkWrap,
+                                            MaterialTapTargetSize
+                                                .shrinkWrap,
                                             onPressed: () {
                                               pass.text.isEmpty && form.is_private
                                                   ? null
@@ -385,8 +385,8 @@ class _FormScreenState extends State<FormScreen> {
                                             },
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12.0),
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 12.0),
                                               child: Text('Participate'),
                                             )),
                                       )
