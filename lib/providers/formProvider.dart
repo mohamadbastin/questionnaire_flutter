@@ -178,4 +178,61 @@ class FormProvider with ChangeNotifier {
     // print(_myForms.length);
     notifyListeners();
   }
+
+  Future<void> createForm(Map forminfo, Map questions) async {
+    // print("formId" + formId.toString());
+    var res1 = await http.post(
+        host + "/form/create/",
+        body: json.encode(forminfo),
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+
+    );
+
+    if (res1.statusCode == 201){
+      print("form created");
+      var id = json.decode(res1.body)["form_id"].toString();
+
+// # [
+//     #     {
+//     #         "type": "text"/"choice"/"range"
+//     #         "text"
+//     #         "number"
+//     #         "description"
+//     #
+//     #         //"text"
+//     #
+//     #         //"range"
+//     #         start
+//     #         start text
+//     #         end
+//     #         end text
+//     #
+//     #         //choice
+//     #         choice_type MA SA
+//     #         choices:[
+//     #              {
+//     #                  text
+//     #              }
+//     #         ]
+//     #     }
+//     # ]
+
+
+
+      var res2 = await http.post(
+        host + "/form/question/create/$id",
+        body: json.encode(questions),
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+
+    );
+    }
+  }
 }

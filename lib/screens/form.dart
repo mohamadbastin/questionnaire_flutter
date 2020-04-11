@@ -242,63 +242,7 @@ class _FormScreenState extends State<FormScreen> {
                                                 height: 10.0,
                                               ),
                                               Row(
-                                                children: <Widget>[
-// <<<<<<< HEAD
-//                                                     // Icon(Icons.lock_outline),
-//                                                     // Padding(
-//                                                     //   padding: EdgeInsets.only(
-//                                                     //       left: 10),
-//                                                     // ),
-//                                                     Align(
-//                                                       alignment:
-//                                                           Alignment.center,
-//                                                       child: Container(
-//                                                           // color: Colors.red,
-//                                                           padding:
-//                                                               EdgeInsets.only(
-//                                                             bottom:
-//                                                                 MediaQuery.of(
-//                                                                         context)
-//                                                                     .viewInsets
-//                                                                     .bottom,
-//                                                           ),
-//                                                           width: 200,
-//                                                           child: TextFormField(
-//                                                               onChanged:
-//                                                                   (value) =>
-//                                                                       setState(
-//                                                                           () {}),
-//                                                               focusNode: passf,
-//                                                               controller: pass,
-//                                                               decoration: InputDecoration(
-//                                                                   prefixIcon:
-//                                                                       Icon(Icons
-//                                                                           .lock_outline),
-//                                                                   hintText:
-//                                                                       "password"))),
-//                                                     )
-//                                                   ],
-//                                                 )
-//                                               : Container(),
-//                                           Padding(
-//                                             padding: EdgeInsets.only(top: 20),
-//                                           ),
-//                                           pass.text.isEmpty && form.is_private
-//                                               ? RaisedButton(
-//                                                   onPressed: null,
-//                                                   child: Text('Participate'))
-//                                               : RaisedButton(
-//                                                   onPressed: () {
-//                                                     _participate();
-//                                                     print("dfg");
-//                                                   },
-//                                                   child: Text('Participate')),
-//                                           SizedBox(
-//                                             height: 30,
-//                                           )
-//                                         ],
-//                                       ),
-// =======
+                                                children: <Widget>[  
                                                   // Padding(padding: EdgeInsets.only(left:45),),
                                                   Icon(Icons.loop),
                                                   // SizedBox(
@@ -353,7 +297,7 @@ class _FormScreenState extends State<FormScreen> {
                                         height: 20.0,
                                       ),
                                       form.is_private == true
-                                          ? TextFormField(
+                                          ? TextField(
                                               onChanged: (value) =>
                                                   setState(() {}),
                                               controller: pass,

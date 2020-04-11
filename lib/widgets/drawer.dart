@@ -57,9 +57,9 @@ class MainDrawer extends StatelessWidget {
                   _openSettingsModal(context);
                 },
               ),
-              actions: <Widget>[
-                IconButton(icon: Icon(Icons.notifications), onPressed: null)
-              ],
+              // actions: <Widget>[
+              //   IconButton(icon: Icon(Icons.notifications), onPressed: null)
+              // ],
             ),
             GestureDetector(
                 onTap: null,
