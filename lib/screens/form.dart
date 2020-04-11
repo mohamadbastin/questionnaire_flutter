@@ -379,7 +379,7 @@ class _FormScreenState extends State<FormScreen> {
                                                 MaterialTapTargetSize
                                                     .shrinkWrap,
                                             onPressed: () {
-                                              pass.text.isEmpty
+                                              pass.text.isEmpty && form.is_private
                                                   ? null
                                                   : _participate();
                                             },
