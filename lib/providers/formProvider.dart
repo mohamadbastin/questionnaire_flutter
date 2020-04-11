@@ -57,8 +57,8 @@ class FormProvider with ChangeNotifier {
         // print();
         times.add(int.parse(form['time'][j]['hour']));
       }
-      print(4);
-      print(form['is_private']);
+      // print(4);
+      // print(form['is_private']);
       // print(times.length);
 
 

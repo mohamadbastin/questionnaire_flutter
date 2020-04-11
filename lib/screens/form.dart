@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:questionnaire_flutter/models/form.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/screens/formQuestionsScreen.dart';
 import 'package:questionnaire_flutter/widgets/drawer.dart';
 
@@ -19,11 +21,35 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     final myForm form = ModalRoute.of(context).settings.arguments;
+    final FocusNode passf = new FocusNode();
+
+    void _participate() async {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(),
+                ));
+          });
+
+          final _pro = Provider.of<Profile>(context, listen: false);
+          var res = await _pro.participate(pass.text, form.id);
+          print(res);
+           
+    }
 
     return Scaffold(
         appBar: AppBar(title: Text(form.name), centerTitle: true, elevation: 5.0,),
         drawer: MainDrawer(),
         backgroundColor: Colors.grey,
+
         body: SingleChildScrollView(
           child: GestureDetector(
             onTap: () {
@@ -120,6 +146,7 @@ class _FormScreenState extends State<FormScreen> {
                                                     Container(
                                                       child: Text(
                                                         // DateFormat.yMMMEd().format(DateTime.parse(form.created)),
+
                                                           intl.DateFormat.yMMMMd()
                                                               .format(
                                                               DateTime.parse(
@@ -129,6 +156,37 @@ class _FormScreenState extends State<FormScreen> {
                                                     )
                                                   ],
                                                 ),
+// <<<<<<< HEAD
+//                                                 FittedBox(
+//                                                   fit: BoxFit.fill,
+//                                                   child: Container(
+//                                                     // height: 200,
+//                                                     width:
+//                                                         MediaQuery.of(context)
+//                                                                 .size
+//                                                                 .width -
+//                                                             158,
+//                                                     child: Container(
+//                                                       height: 100,
+//                                                       child:
+//                                                           SingleChildScrollView(
+//                                                         // height: 200,
+//                                                         child: Directionality(
+//                                                           // TODO
+//                                                           textDirection:
+//                                                               TextDirection.rtl,
+//                                                           child: Text(
+//                                                             form.description,
+//                                                             //  textDirection:,
+
+//                                                             style: TextStyle(
+//                                                                 color: Colors
+//                                                                     .white,
+//                                                                 fontSize: 15),
+//                                                           ),
+//                                                         ),
+//                                                       ),
+// =======
                                               ],
                                             ),
 
@@ -149,16 +207,72 @@ class _FormScreenState extends State<FormScreen> {
                                                 SizedBox(height: 10.0,),
                                                 Row(
                                                   children: <Widget>[
+// <<<<<<< HEAD
+//                                                     // Icon(Icons.lock_outline),
+//                                                     // Padding(
+//                                                     //   padding: EdgeInsets.only(
+//                                                     //       left: 10),
+//                                                     // ),
+//                                                     Align(
+//                                                       alignment:
+//                                                           Alignment.center,
+//                                                       child: Container(
+//                                                           // color: Colors.red,
+//                                                           padding:
+//                                                               EdgeInsets.only(
+//                                                             bottom:
+//                                                                 MediaQuery.of(
+//                                                                         context)
+//                                                                     .viewInsets
+//                                                                     .bottom,
+//                                                           ),
+//                                                           width: 200,
+//                                                           child: TextFormField(
+//                                                               onChanged:
+//                                                                   (value) =>
+//                                                                       setState(
+//                                                                           () {}),
+//                                                               focusNode: passf,
+//                                                               controller: pass,
+//                                                               decoration: InputDecoration(
+//                                                                   prefixIcon:
+//                                                                       Icon(Icons
+//                                                                           .lock_outline),
+//                                                                   hintText:
+//                                                                       "password"))),
+//                                                     )
+//                                                   ],
+//                                                 )
+//                                               : Container(),
+//                                           Padding(
+//                                             padding: EdgeInsets.only(top: 20),
+//                                           ),
+//                                           pass.text.isEmpty && form.is_private
+//                                               ? RaisedButton(
+//                                                   onPressed: null,
+//                                                   child: Text('Participate'))
+//                                               : RaisedButton(
+//                                                   onPressed: () {
+//                                                     _participate();
+//                                                     print("dfg");
+//                                                   },
+//                                                   child: Text('Participate')),
+//                                           SizedBox(
+//                                             height: 30,
+//                                           )
+//                                         ],
+//                                       ),
+// =======
                                                     // Padding(padding: EdgeInsets.only(left:45),),
                                                     Icon(Icons.loop),
-                                                    SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                    Container(
-                                                        child: Text(
-                                                            '${form.duration.toString()} Day(s)'
-                                                        )
-                                                    )
+                                                    // SizedBox(
+                                                    //   width: 3,
+                                                    // ),
+                                                    // Container(
+                                                    //     child: Text(
+                                                    //         '${form.duration.toString()} Day(s)'
+                                                    //     )
+                                                    // )
                                                   ],
                                                 ),
                                               ],

@@ -41,7 +41,7 @@ class Profile with ChangeNotifier {
         }),
         headers: {
           'Content-Type': 'application/json',
-        }).then((value) => null);
+        }).then((value) => print(value.body));
     print("sending code");
   }
 
@@ -83,4 +83,22 @@ class Profile with ChangeNotifier {
     notifications = value;
     notifyListeners();
   }
+
+  Future<http.Response> participate(String password, int fid) async {
+    String formid = fid.toString();
+    await http.post("$host/participate/$formid",
+        body: json.encode({
+          'password':password,
+        
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }).then((value) {
+          print (value.body);
+          return value;
+        });
+    print("participating");
+  
+  } 
 }
