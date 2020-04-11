@@ -42,7 +42,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
 
       _phone = Provider.of<Profile>(context, listen: false).phone;
       Provider.of<Profile>(context, listen: false).login(pin, _phone).then((resp) {
-        Navigator.popAndPushNamed(context, '/recent');
+        Navigator.pushReplacementNamed(context, '/recent');
 
       }).catchError((e) {
         _showMessageDialog('Cannot Connect To Server');

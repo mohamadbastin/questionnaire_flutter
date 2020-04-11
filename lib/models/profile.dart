@@ -46,21 +46,28 @@ class Profile with ChangeNotifier {
   }
 
   Future<void> login(String pin, String phone) async {
-    final res = await http.post("$host/login/",
-        body: json.encode({'username': phone, 'password': pin}),
-        headers: {
-          'Content-Type': 'application/json',
-        });
+    try {
+      final res = await http.post("$host/login/",
+          body: json.encode({'username': phone, 'password': pin}),
+          headers: {
+            'Content-Type': 'application/json',
+          });
+      print(res);
+      print(res.body);
+      token = json.decode(res.body)['token'];
+      print(authtoken);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('askfilltoken', token);
+      authtoken = token;
+    } catch(e) {
+      print("here");
+      print(e);
+    }
+    notifyListeners();
+
     print("got in");
 
-    print(res);
-    print(res.body);
-    token = json.decode(res.body)['token'];
-    print(authtoken);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('askfilltoken', token);
-    authtoken = token;
-    notifyListeners();
+
   }
 
   Future<void> logout() async {
