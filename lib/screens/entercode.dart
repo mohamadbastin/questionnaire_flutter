@@ -57,8 +57,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
         Navigator.of(context).pop();
         },),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.done),onPressed: () {
-            verifycode(pin);
+          IconButton(icon: Icon(Icons.done),onPressed: () async {
+            await verifycode(pin);
           },)
         ],
         elevation: 0,
