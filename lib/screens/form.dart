@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:questionnaire_flutter/models/form.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaire_flutter/models/profile.dart';
 
 class FormScreen extends StatefulWidget {
   static final routeName = "/form";
@@ -17,6 +19,29 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     final myForm form = ModalRoute.of(context).settings.arguments;
+    final FocusNode passf = new FocusNode();
+
+    void _participate() async {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(),
+                ));
+          });
+
+          final _pro = Provider.of<Profile>(context, listen: false);
+          var res = await _pro.participate(pass.text, form.id);
+          print(res);
+           
+    }
 
     return Scaffold(
         appBar: AppBar(title: Text(form.name)),
@@ -26,7 +51,7 @@ class _FormScreenState extends State<FormScreen> {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
           child: SingleChildScrollView(
-                      child: Container(
+            child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -121,9 +146,9 @@ class _FormScreenState extends State<FormScreen> {
                                                     child: Text(
                                                         // DateFormat.yMMMEd().format(DateTime.parse(form.created)),
                                                         intl.DateFormat.yMMMMd()
-                                                            .format(
-                                                                DateTime.parse(
-                                                                    form.created))
+                                                            .format(DateTime
+                                                                .parse(form
+                                                                    .created))
                                                         // form.created
                                                         ),
                                                   )
@@ -162,10 +187,11 @@ class _FormScreenState extends State<FormScreen> {
                                                   fit: BoxFit.fill,
                                                   child: Container(
                                                     // height: 200,
-                                                    width: MediaQuery.of(context)
-                                                            .size
-                                                            .width -
-                                                        158,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            158,
                                                     child: Container(
                                                       height: 100,
                                                       child:
@@ -180,8 +206,8 @@ class _FormScreenState extends State<FormScreen> {
                                                             //  textDirection:,
 
                                                             style: TextStyle(
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontSize: 15),
                                                           ),
                                                         ),
@@ -202,23 +228,32 @@ class _FormScreenState extends State<FormScreen> {
                                                     //       left: 10),
                                                     // ),
                                                     Align(
-                                                      alignment: Alignment.center,
-                                                                                                          child: Container(
-                                                        // color: Colors.red,
-                                                       padding: EdgeInsets.only(
-                                                         bottom: MediaQuery.of(
-                                                                 context)
-                                                             .viewInsets
-                                                             .bottom,
-                                                       ),
-                                                       width: 200,
-                                                       child: TextFormField(
-                                                           controller: pass,
-                                                           decoration:
-                                                               InputDecoration(
-                                                                 prefixIcon: Icon(Icons.lock_outline),
-                                                                   hintText:
-                                                                       "password"))),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Container(
+                                                          // color: Colors.red,
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            bottom:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .viewInsets
+                                                                    .bottom,
+                                                          ),
+                                                          width: 200,
+                                                          child: TextFormField(
+                                                              onChanged:
+                                                                  (value) =>
+                                                                      setState(
+                                                                          () {}),
+                                                              focusNode: passf,
+                                                              controller: pass,
+                                                              decoration: InputDecoration(
+                                                                  prefixIcon:
+                                                                      Icon(Icons
+                                                                          .lock_outline),
+                                                                  hintText:
+                                                                      "password"))),
                                                     )
                                                   ],
                                                 )
@@ -226,13 +261,14 @@ class _FormScreenState extends State<FormScreen> {
                                           Padding(
                                             padding: EdgeInsets.only(top: 20),
                                           ),
-                                          pass.text.isEmpty
+                                          pass.text.isEmpty && form.is_private
                                               ? RaisedButton(
                                                   onPressed: null,
                                                   child: Text('Participate'))
                                               : RaisedButton(
                                                   onPressed: () {
-                                                    print(form.is_private);
+                                                    _participate();
+                                                    print("dfg");
                                                   },
                                                   child: Text('Participate')),
                                           SizedBox(
