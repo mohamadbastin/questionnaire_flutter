@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class Settings extends StatefulWidget {
   @override
@@ -37,6 +39,11 @@ class _SettingsState extends State<Settings> {
               ),
             ],
           ),
+          Divider(),
+          ListTile(
+              onTap: () => launch("tel://+989379852503"),
+              title: Text('تماس با ما', textDirection: TextDirection.rtl),
+            ),
         ],
       )
     );

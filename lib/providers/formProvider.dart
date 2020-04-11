@@ -8,6 +8,9 @@ import 'package:questionnaire_flutter/main.dart';
 
 
 List<myForm> myFormsList = [];
+List<myForm> activeFormsList = [];
+List<myForm> mymyFormsList = [];
+
 
 class FormProvider with ChangeNotifier {
   List<myForm> _myForms = [];
@@ -29,12 +32,12 @@ class FormProvider with ChangeNotifier {
       "Authorization": "Token " + authtoken.toString(),
     });
 
-    print(response.body);
+    // print(response.body);
 
     var extractedData = List<Map<String, dynamic>>.from(
         jsonDecode(utf8.decode(response.bodyBytes)));
 
-    print(extractedData);
+    // print(extractedData);
 
     final List<myForm> extractedList = [];
     // print(extractedData.length);
@@ -58,7 +61,7 @@ class FormProvider with ChangeNotifier {
         times.add(int.parse(form['time'][j]['hour']));
       }
       // print(4);
-      // print(form['is_private']);
+      print(form['name']);
       // print(times.length);
 
 
@@ -107,5 +110,72 @@ class FormProvider with ChangeNotifier {
     return _myForms.firstWhere((form) {
       return form.id == id;
     });
+  }
+
+
+  Future<void> fetchAndSetActiveForms() async {
+    // String token = await Provider.of<Profile>(context, listen: false).token;
+    // print ("asfg");
+    // String formid = fid.toString(); 
+    var response = await http.get(host + "/answered-form/", headers: {
+      "Accept": "application/json",
+      'Content-Type': 'application/json',
+      "Authorization": "Token " + authtoken.toString(),
+    });
+
+    print(response.body);
+
+    var extractedData = List<Map<String, dynamic>>.from(
+        jsonDecode(utf8.decode(response.bodyBytes)));
+
+    // print(extractedData);
+
+    final List<myForm> extractedList = [];
+    // print(extractedData.length);
+    // print(2);
+
+    extractedData.forEach((form) {
+      var i = form['author'];
+      Profile tmp_profile = new Profile(
+          id: i['id'],
+          name: i['name'],
+          phone: i['phone'],
+          email: i['email'],
+          picture: i['picture']);
+
+        // print(3);
+
+      List<int> times = [];
+      // print(form['time']);
+      for (int j=0; j<form['time'].length;j++){
+        // print();
+        times.add(int.parse(form['time'][j]['hour']));
+      }
+      // print(4);
+      print(form['name']);
+      // print(times.length);
+
+
+      extractedList.add(myForm(
+        id: form['id'],
+        name: form['name'],
+        author: tmp_profile,
+        description: form['description'],
+        is_active: form['is_active'],
+        is_private: form['is_private'],
+        is_repeated: form['is_repeated'],
+        created: form['created'],
+        estimated_time: form['estimated_time'],
+        duration: form['duration_days'],
+        times: times
+      
+      ));
+      // print(MediaQuery.of(context));
+    });
+    // _myForms = extractedList;
+    activeFormsList = extractedList;
+    // print(_myForms);
+    // print(_myForms.length);
+    notifyListeners();
   }
 }

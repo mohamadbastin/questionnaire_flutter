@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:questionnaire_flutter/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
+Profile myProfilee = Profile(name: "boz");
 String authtoken;
 class Profile with ChangeNotifier {
   int id;
@@ -29,6 +29,7 @@ class Profile with ChangeNotifier {
     // add other information
     token = prefs.getString("askfilltoken");
     authtoken = token;
+    await getProfile();
     notifyListeners();
     return true;
   }
@@ -60,6 +61,8 @@ class Profile with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('askfilltoken', token);
     authtoken = token;
+
+    await getProfile();
     notifyListeners();
   }
 
@@ -77,9 +80,9 @@ class Profile with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<http.Response> participate(String password, int fid) async {
+  Future<String> participate(String password, int fid) async {
     String formid = fid.toString();
-    await http.post("$host/participate/$formid",
+    var res = await http.post("$host/participate/$formid",
         body: json.encode({
           'password':password,
         
@@ -87,11 +90,39 @@ class Profile with ChangeNotifier {
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
-        }).then((value) {
-          print (value.body);
-          return value;
         });
-    print("participating");
+        print("participating");
+        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+        
+  
+  } 
+
+
+  Future<String> removeParticipate(int fid) async {
+    String formid = fid.toString();
+    var res = await http.post("$host/removeparticipate/$formid",
+        body: json.encode({
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        });
+        print("removing participating");
+        if (json.decode(res.body)["msg"] == "ok") {return "yes";} else {return "no";}
+        
+  
+  } 
+
+  Future<void> getProfile() async {
+    var res = await http.get("$host/profile/",
+        
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        });
+        print("profiling");
+        var b =json.decode(res.body);
+        myProfilee.name = b["name"];
   
   } 
 }
