@@ -502,7 +502,7 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                                          ),
                                                        ),
                                                        key: Key(question["text"] + _questions.indexOf(question).toString() + "remove"),
-                                                       direction: DismissDirection.startToEnd,
+                                                       direction: DismissDirection.endToStart,
                                                        onDismissed: (dir) {
                                                          setState(() {
                                                            _questions.remove(question);
