@@ -134,8 +134,8 @@ class _FormQuestionsState extends State<FormQuestions> {
                           borderRadius: BorderRadius.circular(10.0),
                           gradient: LinearGradient(
                               colors: [
-                                hexToColor('#d7d2cc'),
-                                hexToColor('#304352'),
+                                hexToColor('#4b6cb7'),
+                                hexToColor('#182848'),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight

@@ -258,22 +258,62 @@ class FormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createForm(Map forminfo, Map questions) async {
+  Future<void> createForm(Map<String, dynamic> formInfo, List<Map<String, dynamic>> questions) async {
+    List<Map<String, dynamic>> _singleFormQuestions = [];
+    String a = "sads";
+    questions.forEach((question) {
+      if (question["type"].toLowerCase() == "text") {
+        _singleFormQuestions.add({
+          "type": question["type"].toLowerCase(),
+          "text": question["text"],
+          "number": questions.indexOf(question) + 1,
+          "description": ""
+        });
+      } else if (question["type"].toLowerCase() == "range") {
+        _singleFormQuestions.add({
+          "type": question["type"].toLowerCase(),
+          "text": question["text"],
+          "number": questions.indexOf(question) + 1,
+          "description": "",
+          "start_text": question["start_text"],
+          "end_text": question["end_text"],
+        });
+      } else { // choice type
+        List<Map<String, dynamic>> _questionChoices = [];
+        question["choices"].forEach((choice) {
+          _questionChoices.add({
+            "text": choice["controller"].text
+          });
+        });
+        _singleFormQuestions.add({
+          "type": question["type"].toLowerCase(),
+          "text": question["text"],
+          "number": questions.indexOf(question) + 1,
+          "description": "",
+          "choice_type": question["choice_type"],
+          "choices": _questionChoices
+        });
+      }
+    });
+
+
+
+    print(_singleFormQuestions);
     // print("formId" + formId.toString());
-    var res1 = await http.post(
-        host + "/form/create/",
-        body: json.encode(forminfo),
-        headers: {
-          "Accept": "application/json",
-          'Content-Type': 'application/json',
-          "Authorization": "Token " + authtoken.toString(),
-        }
-
-    );
-
-    if (res1.statusCode == 201){
-      print("form created");
-      var id = json.decode(res1.body)["form_id"].toString();
+//    var res1 = await http.post(
+//        host + "/form/create/",
+//        body: json.encode(forminfo),
+//        headers: {
+//          "Accept": "application/json",
+//          'Content-Type': 'application/json',
+//          "Authorization": "Token " + authtoken.toString(),
+//        }
+//
+//    );
+//
+//    if (res1.statusCode == 201){
+//      print("form created");
+//      var id = json.decode(res1.body)["form_id"].toString();
 
 // # [
 //     #     {
@@ -302,16 +342,16 @@ class FormProvider with ChangeNotifier {
 
 
 
-      var res2 = await http.post(
-          host + "/form/question/create/$id",
-          body: json.encode(questions),
-          headers: {
-            "Accept": "application/json",
-            'Content-Type': 'application/json',
-            "Authorization": "Token " + authtoken.toString(),
-          }
-      );
-    }
+//      var res2 = await http.post(
+//          host + "/form/question/create/$id",
+//          body: json.encode(questions),
+//          headers: {
+//            "Accept": "application/json",
+//            'Content-Type': 'application/json',
+//            "Authorization": "Token " + authtoken.toString(),
+//          }
+//      );
+//    }
   }
 
   Future<void> submitFormAnswers(List<Map<String, dynamic>> userAnswers, int formId) async {

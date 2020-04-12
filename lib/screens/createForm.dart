@@ -17,7 +17,7 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
   final _formKey = GlobalKey<FormState>();
   List<String> questionTypes = ["Text", "Choice", "Range"];
   String _questionType = "Text";
-  List<dynamic> _questions = [];
+  List<Map<String, dynamic>> _questions = [];
   TextEditingController _questionTextController = new TextEditingController();
   TextEditingController _currentChoiceController = new TextEditingController();
   TextEditingController _lowThresholdController = new TextEditingController();
@@ -121,7 +121,7 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                 Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,
-              child: FormAspects(),
+              child: FormAspects(questions: _questions),
             ));
   }
 
@@ -334,6 +334,13 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                                                       controller:
                                                       _currentChoiceController,
                                                       focusNode: _choiceFocusNode,
+                                                      onFieldSubmitted: (value) {
+                                                        setState(() {
+                                                          _addChoice();
+                                                          print("here");
+                                                          _scrollToBottom();
+                                                        });
+                                                      },
                                                       decoration: InputDecoration(
                                                         hintText: "Question Choice",
                                                         prefixIcon: Icon(
@@ -632,6 +639,7 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                               topRight: Radius.elliptical(100, 20))),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       onPressed: () {
+                        print(_questions);
                         _setFormAspects(context);
                       },
                       child: Text(

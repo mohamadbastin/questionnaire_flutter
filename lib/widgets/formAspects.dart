@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:questionnaire_flutter/providers/formProvider.dart';
 
 class FormAspects extends StatefulWidget {
+  final List<Map<String, dynamic>> questions;
+  FormAspects({this.questions});
+
   @override
   _FormAspectsState createState() => _FormAspectsState();
 }
@@ -66,6 +71,10 @@ class _FormAspectsState extends State<FormAspects> {
 
   final FocusNode passwordFocusNode = new FocusNode();
 
+  Future<void> _createForm(FormProvider formProvider) async {
+    await formProvider.createForm(_formInfo, widget.questions);
+  }
+
 
   Widget _formField(String title, Function validator, String value,
       TextInputType textInputType, Function onSaved, FocusNode currFocusNode,
@@ -118,11 +127,15 @@ class _FormAspectsState extends State<FormAspects> {
                   children: _times.map((String time) {
                     return CheckboxListTile(
                       title: Text('${time}'),
-                      value: _selected[_times.indexOf(time)],
+                      value: _formInfo["times"].indexOf(time) != -1,
                       onChanged: (bool value) {
                         setState(() {
-                          _selected[_times.indexOf(time)] = value;
-                          print(_selected);
+                          if (_formInfo["times"].indexOf(time) == -1) {
+                            _formInfo["times"].add(time);
+                          } else {
+                            _formInfo["times"].remove(time);
+                          }
+                          print(_formInfo["times"]);
                         });
                       },
                       secondary: const Icon(Icons.hourglass_empty),
@@ -136,7 +149,16 @@ class _FormAspectsState extends State<FormAspects> {
   }
 
   @override
+  void initState() {
+    print(widget.questions);
+    super.initState();
+    // TODO: implement initState
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final formProvider = Provider.of<FormProvider>(context, listen: false);
     final mediaSize = MediaQuery
         .of(context)
         .size;
@@ -287,7 +309,9 @@ class _FormAspectsState extends State<FormAspects> {
                       topLeft: Radius.elliptical(100, 20),
                       topRight: Radius.elliptical(100, 20))),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              onPressed: () {
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _createForm(formProvider);
 
               },
               child: Padding(
