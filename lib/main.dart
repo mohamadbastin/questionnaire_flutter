@@ -4,16 +4,21 @@ import 'package:provider/provider.dart';
 import 'package:questionnaire_flutter/models/profile.dart';
 import 'package:questionnaire_flutter/providers/formProvider.dart';
 import 'package:questionnaire_flutter/screens/ErrorScreen.dart';
+import 'package:questionnaire_flutter/screens/byques.dart';
+import 'package:questionnaire_flutter/screens/chooseform.dart';
 import 'package:questionnaire_flutter/screens/createForm.dart';
 import 'package:questionnaire_flutter/screens/entercode.dart';
 import 'package:questionnaire_flutter/screens/form.dart';
 import 'package:questionnaire_flutter/screens/formQuestionsScreen.dart';
+import 'package:questionnaire_flutter/screens/reportbyform.dart';
 import 'package:questionnaire_flutter/screens/singleForm.dart';
 import 'package:questionnaire_flutter/screens/recent.dart';
 import 'package:questionnaire_flutter/screens/splashScreen.dart';
 import 'screens/authScreen.dart';
 import 'screens/singleForm.dart';
 import 'screens/ActiveForms.dart';
+import 'screens/myforms.dart';
+import 'screens/report_menu.dart';
 
 void main() => runApp(MyApp());
 
@@ -77,6 +82,11 @@ class MyApp extends StatelessWidget {
           CreateFormScreen.routeName: (_) => CreateFormScreen(),
           SingleFormScreen.routeName: (_) => SingleFormScreen(),
           FormScreen.routeName: (_) => FormScreen(),
+          ReportByFormScreen.routeName: (_) => ReportByFormScreen(),
+          ChooseQuesScreen.routeName: (_) => ChooseQuesScreen(),
+          ChooseFormsSceen.routeName: (_) => ChooseFormsSceen(),
+          ReportMenuScreen.routeName: (_) => ReportMenuScreen(),
+          MyFormsSceen.routeName: (_) => MyFormsSceen(),
           ActiveFormsSceen.routeName: (_) => ActiveFormsSceen(),
 //          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen(s),
         },

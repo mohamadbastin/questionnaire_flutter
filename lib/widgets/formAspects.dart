@@ -12,6 +12,7 @@ class _FormAspectsState extends State<FormAspects> {
     "description": "",
     "estimated_time": "",
     "is_active": false,
+    "duration_days": 1,
     "is_private": false,
     "is_repeated": false,
     "password" : "",

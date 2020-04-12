@@ -51,7 +51,7 @@ class _ActiveFormsState extends State<ActiveForms> {
   Widget build(BuildContext context) {
     final profile = Provider.of<Profile>(context, listen: false);
     return Scaffold(
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
         appBar: AppBar(
           elevation: 5,
           title: Text("Active Forms"),
