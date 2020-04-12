@@ -310,8 +310,55 @@ class FormProvider with ChangeNotifier {
             'Content-Type': 'application/json',
             "Authorization": "Token " + authtoken.toString(),
           }
-
       );
     }
+  }
+
+  Future<void> submitFormAnswers(List<Map<String, dynamic>> userAnswers, int formId) async {
+    print("formId" + formId.toString());
+
+    List<Map<String, dynamic>> formAnswers = [];
+
+    userAnswers.forEach((userAnswer) {
+      if (userAnswer["type"] == "text") {
+        formAnswers.add({
+          "question": userAnswer["question"],
+          "text": userAnswer["answer"].text
+        });
+      } else if (userAnswer["type"] == "choice") {
+        var choices = userAnswer["answer"];
+        var selectedChoices = [];
+        choices.forEach((choice) {
+          if (choice["value"]) {
+            selectedChoices.add({
+              "id": choice["id"]
+            });
+          }
+        });
+        formAnswers.add({
+          "question": userAnswer["question"],
+          "choices": selectedChoices
+        });
+      } else{
+        formAnswers.add({
+          "question": userAnswer["question"],
+          "number": userAnswer["answer"]
+        });
+      }
+    });
+
+    print(formAnswers);
+
+    final response = await http.post(
+        host + "/form/answer/$formId",
+        body: json.encode(formAnswers),
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+    );
+
+    print(response.body);
   }
 }

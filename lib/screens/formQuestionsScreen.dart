@@ -46,7 +46,7 @@ class _FormQuestionsScreenState extends State<FormQuestionsScreen> {
               ? Scaffold(
             body: Center(child: CircularProgressIndicator()),
           )
-              : FormQuestions(),
+              : FormQuestions(formId: widget.formId,),
         )
     );
   }
@@ -54,6 +54,8 @@ class _FormQuestionsScreenState extends State<FormQuestionsScreen> {
 
 
 class FormQuestions extends StatefulWidget {
+  final int formId;
+  FormQuestions({this.formId});
 
   @override
   _FormQuestionsState createState() => _FormQuestionsState();
@@ -74,26 +76,44 @@ class _FormQuestionsState extends State<FormQuestions> {
   void initState() {
     // TODO: implement initState
     formQuestions.forEach((formQuestion) {
-      if (formQuestion["question"]["type"] == "text" || formQuestion["question"]["type"] == "range") {
+      if (formQuestion["question"]["type"] == "text") {
         _formAnswers.add({
+          "question": formQuestion["question"]["id"],
+          "type": formQuestion["question"]["type"],
           "answer": new TextEditingController()
         });
       } else if (formQuestion["question"]["type"] == "choice") {
         var selectedChoice = [];
         formQuestion["question"]["choice"].forEach((choice) {
-          selectedChoice.add(false);
+          selectedChoice.add({
+            "id": choice["id"],
+            "value": false,
+          });
         });
         _formAnswers.add({
+          "question": formQuestion["question"]["id"],
+          "type": formQuestion["question"]["type"],
           "answer": selectedChoice
+        });
+      } else {
+        _formAnswers.add({
+          "question": formQuestion["question"]["id"],
+          "type": formQuestion["question"]["type"],
+          "answer": 0.0
         });
       }
     });
+    print(_formAnswers);
     super.initState();
   }
-  
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final formProvider = Provider.of<FormProvider>(context, listen: false);
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text("Form Questions"), centerTitle: true, elevation: 5.0,),
       body: GestureDetector(
@@ -152,25 +172,42 @@ class _FormQuestionsState extends State<FormQuestions> {
                               shrinkWrap: true,
                               physics: ClampingScrollPhysics(),
                               itemBuilder: (context, choiceIndex) => CheckboxListTile(
-                                value: false,
+                                value: _formAnswers[index]["answer"][choiceIndex]["value"],
                                 title: Text(
                                     '${formQuestions[index]["question"]["choice"][choiceIndex]["text"]}'
                                 ),
                                 onChanged: (value) {
-
+                                  setState(() {
+                                    _formAnswers[index]["answer"][choiceIndex]["value"] = value;
+                                    if (formQuestions[index]["question"]["choice_type"] == "SA") {
+                                      int i = 0;
+                                      for (i = 0; i < _formAnswers[index]["answer"].length; ++i) {
+                                        if (i != choiceIndex) {
+                                          _formAnswers[index]["answer"][i]["value"] = false;
+                                        }
+                                      }
+                                    }
+//                                    _formAnswers[index]["answer"].forEach((choice) {
+//                                      if (_formAnswers[index]["answer"].indexOf(choice) != choiceIndex) {
+//                                        print(choice);
+//                                        choice = false;
+//                                      }
+//                                    });
+                                  });
                                 },
+                                activeColor: Colors.green,
                               ),
                               itemCount: formQuestions[index]["question"]["choice"].length,
                             ) : Slider(
-                              value: _value,
+                              value: _formAnswers[index]["answer"],
                               min: 0,
                               max: 100,
                               divisions: 10,
-                              label: '$_value',
+                              label: '${_formAnswers[index]["answer"]}',
                               onChanged: (value) {
                                 setState(
                                       () {
-                                    _value = value;
+                                        _formAnswers[index]["answer"] = value;
                                   },
                                 );
                               },
@@ -193,7 +230,38 @@ class _FormQuestionsState extends State<FormQuestions> {
                         topLeft: Radius.elliptical(100, 20),
                         topRight: Radius.elliptical(100, 20))),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                onPressed: () {
+                onPressed: () async {
+
+                  print("in pressed");
+                  print(widget.formId);
+
+                  formProvider.submitFormAnswers(_formAnswers, widget.formId).then((response) {
+                    _scaffoldKey.currentState.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Form Answers Submitted Successfuly!",
+                          textAlign: TextAlign.center,
+                        ),
+                        elevation: 5,
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.green,
+                        action: SnackBarAction(
+                          label: "Dismiss",
+                          textColor: Colors.red,
+                          onPressed: () {
+                            _scaffoldKey.currentState.removeCurrentSnackBar();
+                          },
+                        ),
+
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.elliptical(100, 20),
+                            topLeft: Radius.elliptical(100, 20)
+                          )
+                        ),
+                      )
+                    );
+                  });
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
