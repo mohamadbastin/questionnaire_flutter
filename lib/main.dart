@@ -59,6 +59,15 @@ class MyApp extends StatelessWidget {
                 )
             )
         ),
+        onGenerateRoute: (RouteSettings settings) {
+          print('build route for ${settings.name}');
+          print('build route for ${settings.arguments}');
+          var routes = <String, WidgetBuilder>{
+            FormQuestionsScreen.routeName: (ctx) => FormQuestionsScreen(settings.arguments),
+          };
+          WidgetBuilder builder = routes[settings.name];
+          return MaterialPageRoute(builder: (ctx) => builder(ctx));
+        },
         home: MyHomePage(),
         routes: {
           // "/": (_) => SplashScreen(),
@@ -69,7 +78,7 @@ class MyApp extends StatelessWidget {
           SingleFormScreen.routeName: (_) => SingleFormScreen(),
           FormScreen.routeName: (_) => FormScreen(),
           ActiveFormsSceen.routeName: (_) => ActiveFormsSceen(),
-          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen(),
+//          FormQuestionsScreen.routeName: (_) => FormQuestionsScreen(s),
         },
       ),
     );

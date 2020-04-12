@@ -10,10 +10,12 @@ import 'package:questionnaire_flutter/main.dart';
 List<myForm> myFormsList = [];
 List<myForm> activeFormsList = [];
 List<myForm> mymyFormsList = [];
-
+List<Map<String, dynamic>> formQuestions = [];
 
 class FormProvider with ChangeNotifier {
   List<myForm> _myForms = [];
+  List<Map<String, dynamic>> _formQuestions = [];
+
 
   List<myForm> get myForms {
     List<myForm> myForms = [];
@@ -23,7 +25,17 @@ class FormProvider with ChangeNotifier {
     return myForms;
   }
 
+  List<Map<String, dynamic>> get singleFormQuestions {
+    List<Map<String, dynamic>> questions = [];
+    for (var question in _formQuestions) {
+      questions.add(question);
+    }
+    return questions;
+  }
+
+
   Future<void> fetchAndSetmyForms() async {
+    print(authtoken);
     // String token = await Provider.of<Profile>(context, listen: false).token;
     // print ("asfg");
     var response = await http.get(host + "/form/list/", headers: {
@@ -90,20 +102,21 @@ class FormProvider with ChangeNotifier {
 
   Future<void> fetchFormQuestions(int formId) async {
     print("formId" + formId.toString());
-    http.get(
+    final response = await http.get(
         host + "/form/questions/$formId",
         headers: {
           "Accept": "application/json",
           'Content-Type': 'application/json',
           "Authorization": "Token " + authtoken.toString(),
         }
-
-    ).then((response) {
-      print(response.body);
-      print("hi all");
-    }).catchError((error) {
-      print(error);
-    });
+    );
+    print(response.body);
+    final extractedData = List<Map<String, dynamic>>.from(
+        jsonDecode(utf8.decode(response.bodyBytes)));
+    _formQuestions = extractedData;
+    formQuestions = extractedData;
+    notifyListeners();
+    print(extractedData);
   }
 
   myForm findById(int id) {
