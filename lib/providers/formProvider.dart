@@ -191,4 +191,127 @@ class FormProvider with ChangeNotifier {
     // print(_myForms.length);
     notifyListeners();
   }
+
+  Future<void> fetchAndSetmymyForms() async {
+    // String token = await Provider.of<Profile>(context, listen: false).token;
+    // print ("asfg");
+    // String formid = fid.toString();
+    var response = await http.get(host + "/user/created-forms/", headers: {
+      "Accept": "application/json",
+      'Content-Type': 'application/json',
+      "Authorization": "Token " + authtoken.toString(),
+    });
+
+    // print(response.body);
+
+    var extractedData = List<Map<String, dynamic>>.from(
+        jsonDecode(utf8.decode(response.bodyBytes)));
+
+    // print(extractedData);
+
+    final List<myForm> extractedList = [];
+    // print(extractedData.length);
+    // print(2);
+
+    extractedData.forEach((form) {
+      var i = form['author'];
+      Profile tmp_profile = new Profile(
+          id: i['id'],
+          name: i['name'],
+          phone: i['phone'],
+          email: i['email'],
+          picture: i['picture']);
+
+      // print(3);
+
+      List<int> times = [];
+      // print(form['time']);
+      for (int j=0; j<form['time'].length;j++){
+        // print();
+        times.add(int.parse(form['time'][j]['hour']));
+      }
+      // print(4);
+      // print(form['name']);
+      // print(times.length);
+
+
+      extractedList.add(myForm(
+          id: form['id'],
+          name: form['name'],
+          author: tmp_profile,
+          description: form['description'],
+          is_active: form['is_active'],
+          is_private: form['is_private'],
+          is_repeated: form['is_repeated'],
+          created: form['created'],
+          estimated_time: form['estimated_time'],
+          duration: form['duration_days'],
+          times: times
+
+      ));
+      // print(MediaQuery.of(context));
+    });
+    // _myForms = extractedList;
+    mymyFormsList = extractedList;
+    // print(_myForms);
+    // print(_myForms.length);
+    notifyListeners();
+  }
+
+  Future<void> createForm(Map forminfo, Map questions) async {
+    // print("formId" + formId.toString());
+    var res1 = await http.post(
+        host + "/form/create/",
+        body: json.encode(forminfo),
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+
+    );
+
+    if (res1.statusCode == 201){
+      print("form created");
+      var id = json.decode(res1.body)["form_id"].toString();
+
+// # [
+//     #     {
+//     #         "type": "text"/"choice"/"range"
+//     #         "text"
+//     #         "number"
+//     #         "description"
+//     #
+//     #         //"text"
+//     #
+//     #         //"range"
+//     #         start
+//     #         start text
+//     #         end
+//     #         end text
+//     #
+//     #         //choice
+//     #         choice_type MA SA
+//     #         choices:[
+//     #              {
+//     #                  text
+//     #              }
+//     #         ]
+//     #     }
+//     # ]
+
+
+
+      var res2 = await http.post(
+          host + "/form/question/create/$id",
+          body: json.encode(questions),
+          headers: {
+            "Accept": "application/json",
+            'Content-Type': 'application/json',
+            "Authorization": "Token " + authtoken.toString(),
+          }
+
+      );
+    }
+  }
 }
