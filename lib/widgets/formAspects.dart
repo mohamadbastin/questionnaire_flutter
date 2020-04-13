@@ -4,7 +4,8 @@ import 'package:questionnaire_flutter/providers/formProvider.dart';
 
 class FormAspects extends StatefulWidget {
   final List<Map<String, dynamic>> questions;
-  FormAspects({this.questions});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  FormAspects({this.questions, this.scaffoldKey});
 
   @override
   _FormAspectsState createState() => _FormAspectsState();
@@ -16,8 +17,7 @@ class _FormAspectsState extends State<FormAspects> {
     "name": "",
     "description": "",
     "estimated_time": "",
-    "is_active": false,
-    "duration_days": 1,
+    "is_active": true,
     "is_private": false,
     "is_repeated": false,
     "password" : "",
@@ -71,8 +71,49 @@ class _FormAspectsState extends State<FormAspects> {
 
   final FocusNode passwordFocusNode = new FocusNode();
 
-  Future<void> _createForm(FormProvider formProvider) async {
-    await formProvider.createForm(_formInfo, widget.questions);
+  final _formKey = GlobalKey<FormState>();
+
+  bool _loading = false;
+
+  Future<void> _createForm(FormProvider formProvider, BuildContext context) async {
+    if (!_formKey.currentState.validate()) {
+      setState(() {
+        _loading = false;
+      });
+      return;
+    } else {
+      _formKey.currentState.save();
+      await formProvider.createForm(_formInfo, widget.questions);
+      setState(() {
+        _loading = false;
+      });
+      Navigator.of(context).pop();
+      widget.scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(
+              "Form Created Successfuly!",
+              textAlign: TextAlign.center,
+            ),
+            elevation: 5,
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.green,
+            action: SnackBarAction(
+              label: "Dismiss",
+              textColor: Colors.red,
+              onPressed: () {
+                widget.scaffoldKey.currentState.removeCurrentSnackBar();
+              },
+            ),
+
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.elliptical(100, 20),
+                    topLeft: Radius.elliptical(100, 20)
+                )
+            ),
+          )
+      );
+    }
   }
 
 
@@ -189,120 +230,112 @@ class _FormAspectsState extends State<FormAspects> {
           ),
           Container(
             margin: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                _formField(
-                  "Form Title",
-                      (String value) {
-                    if (value.isEmpty) {
-                      return "Requried";
-                    }
-                    return null;
-                  },
-                  _formInfo["name"],
-                  TextInputType.text,
-                      (value) {
-                    _formInfo["name"] = value;
-                  },
-                  nameFocusNode,
-                  descriptionFocusNode,
-                ),
-                _formField(
-                    "Form Description",
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  _formField(
+                    "Form Title",
                         (String value) {
                       if (value.isEmpty) {
                         return "Requried";
                       }
                       return null;
                     },
-                    _formInfo["description"],
+                    _formInfo["name"],
                     TextInputType.text,
                         (value) {
-                      _formInfo["description"] = value;
+                      _formInfo["name"] = value;
                     },
+                    nameFocusNode,
                     descriptionFocusNode,
-                    estimatedTimeFocusNode
-                ),
-                _formField(
-                    "Estimated Time(In Minutes)",
-                        (String value) {
-                      if (value.isEmpty) {
-                        return "Requried";
-                      } else if (int.tryParse(value) == null ||
-                          int.parse(value) <= 0) {
-                        return "Invalid Input";
-                      }
-                      return null;
-                    },
-                    _formInfo["estimated_time"],
-                    TextInputType.number,
-                        (value) {
-                      _formInfo["estimated_time"] = value;
-                    },
-                    estimatedTimeFocusNode,
-                    passwordFocusNode,
-                ),
-                CheckboxListTile(
-                  activeColor: Colors.blueGrey,
-                  title: Text('Repeatative'),
-                  value: _formInfo["is_repeated"],
-                  onChanged: (bool value) {
-                    setState(() {
-                      _formInfo["is_repeated"] = value;
-                      
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  activeColor: Colors.blueGrey,
-                  title: Text('Private'),
-                  value: _formInfo["is_private"],
-                  onChanged: (bool value) {
-                    setState(() {
-                      _formInfo["is_private"] = value;
-                      isPrivate = value;
-                    });
-                  },
-                ),
-                isPrivate ? _formField(
-                    "Password",
-                        (String value) {
-                      if (value.isEmpty) {
-                        return "Requried";
-                      }
-                      return null;
-                    },
-                    _formInfo["password"],
-                    TextInputType.text,
-                        (value) {
-                      _formInfo["password"] = value;
-                    },
-                    passwordFocusNode,
-                    estimatedTimeFocusNode
-
-                ) : Container(),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10.0),
-                  child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    elevation: 5,
-                    label: Text(
-                        "Select Notification Times",
-                      textAlign: TextAlign.center,
-                    ),
-                    icon: Icon(Icons.access_time, color: Colors.grey,),
-                    onPressed: () {
-                      _displayDialog(context);
+                  ),
+                  _formField(
+                      "Form Description",
+                          (String value) {
+                        if (value.isEmpty) {
+                          return "Requried";
+                        }
+                        return null;
+                      },
+                      _formInfo["description"],
+                      TextInputType.text,
+                          (value) {
+                        _formInfo["description"] = value;
+                      },
+                      descriptionFocusNode,
+                      estimatedTimeFocusNode
+                  ),
+                  _formField(
+                      "Estimated Time(In Minutes)",
+                          (String value) {
+                        if (value.isEmpty) {
+                          return "Requried";
+                        } else if (int.tryParse(value) == null ||
+                            int.parse(value) <= 0) {
+                          return "Invalid Input";
+                        }
+                        return null;
+                      },
+                      _formInfo["estimated_time"],
+                      TextInputType.number,
+                          (value) {
+                        _formInfo["estimated_time"] = value;
+                      },
+                      estimatedTimeFocusNode,
+                      passwordFocusNode,
+                  ),
+                  CheckboxListTile(
+                    activeColor: Colors.blueGrey,
+                    title: Text('Private'),
+                    value: _formInfo["is_private"],
+                    onChanged: (bool value) {
+                      setState(() {
+                        _formInfo["is_private"] = value;
+                        isPrivate = value;
+                      });
                     },
                   ),
-                ),
-          ])
+                  isPrivate ? _formField(
+                      "Password",
+                          (String value) {
+                        if (value.isEmpty) {
+                          return "Requried";
+                        }
+                        return null;
+                      },
+                      _formInfo["password"],
+                      TextInputType.text,
+                          (value) {
+                        _formInfo["password"] = value;
+                      },
+                      passwordFocusNode,
+                      estimatedTimeFocusNode
+
+                  ) : Container(),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    child: RaisedButton.icon(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)
+                      ),
+                      elevation: 5,
+                      label: Text(
+                          "Select Notification Times",
+                        textAlign: TextAlign.center,
+                      ),
+                      icon: Icon(Icons.access_time, color: Colors.grey,),
+                      onPressed: () {
+                        _displayDialog(context);
+                      },
+                    ),
+                  ),
+          ]),
+            )
           ),
           Container(
             width: double.infinity,
-            child: RaisedButton(
+            child: !_loading ? RaisedButton(
               elevation: 10.0,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -310,8 +343,10 @@ class _FormAspectsState extends State<FormAspects> {
                       topRight: Radius.elliptical(100, 20))),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               onPressed: () async {
-                Navigator.of(context).pop();
-                await _createForm(formProvider);
+                setState(() {
+                  _loading = true;
+                });
+                await _createForm(formProvider, context);
 
               },
               child: Padding(
@@ -320,6 +355,11 @@ class _FormAspectsState extends State<FormAspects> {
                   "Create Form",
                   style: TextStyle(fontSize: 18.0),
                 ),
+              ),
+            ) : Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white70,
               ),
             ),
           ),

@@ -244,15 +244,15 @@ class _FormScreenState extends State<FormScreen> {
                                               Row(
                                                 children: <Widget>[  
                                                   // Padding(padding: EdgeInsets.only(left:45),),
-                                                  Icon(Icons.loop),
-                                                  // SizedBox(
-                                                  //   width: 3,
-                                                  // ),
-                                                  // Container(
-                                                  //     child: Text(
-                                                  //         '${form.duration.toString()} Day(s)'
-                                                  //     )
-                                                  // )
+                                                  Icon(form.is_private ? Icons.lock : Icons.lock_open),
+                                                   SizedBox(
+                                                     width: 3,
+                                                   ),
+                                                   Container(
+                                                       child: Text(
+                                                         form.is_private ? 'Private' : 'Public'
+                                                       )
+                                                   )
                                                 ],
                                               ),
                                             ],

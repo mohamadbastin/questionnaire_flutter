@@ -61,7 +61,37 @@ class _MyFormsState extends State<MyForms> {
           margin: EdgeInsets.all(5.0),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return MyFormItem(form: mymyFormsList[index],);
+              return Dismissible(
+                direction: DismissDirection.startToEnd,
+                  key: Key('$index'),
+                  background: Container(
+                    margin: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        gradient: LinearGradient(
+                            colors: [
+                              Colors.red,
+                              Colors.redAccent
+                            ]
+                        )
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 20.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 50.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onDismissed: (dir) async {
+//                    await profile.removeParticipate(activeFormsList[index].id);
+                  },
+                child: MyFormItem(form: mymyFormsList[index],)
+              );
             },
             itemCount: mymyFormsList.length,
           ),

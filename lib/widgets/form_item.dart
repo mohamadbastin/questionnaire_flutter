@@ -85,7 +85,7 @@ class FormItem extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 10.0,
                       ),
                       Row(
                         children: <Widget>[
@@ -103,7 +103,7 @@ class FormItem extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 10.0,
                       ),
                       Row(
                         children: <Widget>[

@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'AskFill',
         theme: ThemeData(
-            primarySwatch: Colors.deepPurple,
+            primarySwatch: Colors.red,
             focusColor: Colors.deepOrange,
-            accentColor: Colors.deepPurpleAccent,
+            accentColor: Colors.redAccent,
             brightness: Brightness.dark,
             inputDecorationTheme: InputDecorationTheme(
                 filled: true,

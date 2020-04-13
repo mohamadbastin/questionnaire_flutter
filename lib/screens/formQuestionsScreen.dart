@@ -198,20 +198,31 @@ class _FormQuestionsState extends State<FormQuestions> {
                                 activeColor: Colors.green,
                               ),
                               itemCount: formQuestions[index]["question"]["choice"].length,
-                            ) : Slider(
-                              value: _formAnswers[index]["answer"],
-                              min: 0,
-                              max: 100,
-                              divisions: 10,
-                              label: '${_formAnswers[index]["answer"]}',
-                              onChanged: (value) {
-                                setState(
-                                      () {
+                            ) : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  formQuestions[index]["question"]["start_text"],
+                                ),
+                                Slider(
+                                  value: _formAnswers[index]["answer"],
+                                  min: 0,
+                                  max: 100,
+                                  divisions: 10,
+                                  label: '${_formAnswers[index]["answer"]}',
+                                  onChanged: (value) {
+                                    setState(
+                                          () {
                                         _formAnswers[index]["answer"] = value;
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                                Text(
+                                  formQuestions[index]["question"]["end_text"],
+                                ),
+                              ],
+                            )
                           )
                         ],
                       ),

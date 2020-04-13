@@ -121,7 +121,7 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                 Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,
-              child: FormAspects(questions: _questions),
+              child: FormAspects(questions: _questions, scaffoldKey: _scaffoldKey,),
             ));
   }
 
@@ -146,11 +146,14 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
     print(_questions);
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final mediaSize = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       body: new GestureDetector(
         onTap: () {
