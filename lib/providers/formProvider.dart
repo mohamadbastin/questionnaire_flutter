@@ -11,6 +11,7 @@ List<myForm> myFormsList = [];
 List<myForm> activeFormsList = [];
 List<myForm> mymyFormsList = [];
 List<Map<String, dynamic>> formQuestions = [];
+List<Map<String, dynamic>> byquesquery = [];
 
 class FormProvider with ChangeNotifier {
   List<myForm> _myForms = [];
@@ -117,6 +118,8 @@ class FormProvider with ChangeNotifier {
     formQuestions = extractedData;
     notifyListeners();
     print(extractedData);
+    print("sdfbjsb;snd;bns");
+    print(formQuestions);
   }
 
   myForm findById(int id) {
@@ -313,5 +316,35 @@ class FormProvider with ChangeNotifier {
 
       );
     }
+  }
+
+
+  Future<void> fetchQuestionQuery(int qid, int ppid, DateTime date) async {
+    // print("formId" + formId.toString());
+    if (date==DateTime.now()){
+      
+    }
+    print(date);
+    final response = await http.post(
+        host + "/repbyq/$qid",
+        body: json.encode({
+          'ppid': ppid.toString(),
+          "date": date.toString()
+        }),
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + authtoken.toString(),
+        }
+    );
+    print(response.body);
+    final extractedData = List<Map<String, dynamic>>.from(
+        jsonDecode(utf8.decode(response.bodyBytes)));
+    // _formQuestions = extractedData;
+    byquesquery = extractedData;
+    notifyListeners();
+    // print(extractedData);
+    print("sdfbjsb;snd;bns");
+    print(byquesquery);
   }
 }
